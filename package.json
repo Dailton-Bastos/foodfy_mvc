@@ -6,6 +6,12 @@
   "author": "Dailton Bastos",
   "license": "MIT",
   "private": false,
+  "scripts": {
+    "dev": "npm-run-all -p nodemon browsersync",
+    "nodemon": "nodemon src/server.js -e js",
+    "browsersync": "browser-sync start --proxy http://localhost:3333 --files './public, src/app/views'",
+    "eslint-fix": "eslint --fix src --ext .js"
+  },
   "dependencies": {
     "express": "^4.17.1",
     "nunjucks": "^3.2.1"
