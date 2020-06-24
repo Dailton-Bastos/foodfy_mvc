@@ -1,0 +1,19 @@
+{% extends "_layout/default.njk" %}
+
+{% block body %}
+  {% include "../header.njk" %}
+
+  <section class="container">
+    <form action="#" class="content-form">
+    {# Inputs #}
+    {% include "./_form.njk" %}
+      <div class="content-header">
+        <h1>{{ info.content_title }}</h1>
+        <div class="header-btn">
+          <a href="/admin/recipes" class="btn btn-danger">Cancelar</a>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      </div>
+    </form>
+  </section>
+{% endblock %}

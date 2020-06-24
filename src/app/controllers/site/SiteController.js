@@ -1,6 +1,8 @@
 module.exports = {
   index(req, res) {
-    const page_title = 'Foodfy | Home'
+    const info = {
+      page_title: 'Foodfy | Home',
+    }
 
     const about = {
       title: 'As melhores receitas',
@@ -8,22 +10,28 @@ module.exports = {
         'Aprenda a construir os melhores pratos com receitas criadas por profissionais do mundo inteiro',
     }
 
-    return res.render('site/index', { about, page_title })
+    return res.render('site/index', { about, info })
   },
 
   recipes(req, res) {
-    const page_title = 'Foodfy | Recipes'
+    const info = {
+      page_title: 'Foodfy | Recipes',
+    }
 
-    return res.render('site/recipes/index', { page_title })
+    return res.render('site/recipes/index', { info })
   },
 
   showRecipe(req, res) {
-    const page_title = 'Triplo bacon burguer'
-    return res.render('site/recipes/show', { page_title })
+    const info = {
+      page_title: 'Triplo bacon burguer',
+    }
+    return res.render('site/recipes/show', { info })
   },
 
   about(req, res) {
-    const page_title = 'Foodfy | About'
+    const info = {
+      page_title: 'Foodfy | About',
+    }
 
     const about = {
       title: 'Sobre o Foodfy',
@@ -37,18 +45,22 @@ module.exports = {
       title: 'Nossas receitas',
     }
 
-    return res.render('site/about', { page_title, about, start, recipes })
+    return res.render('site/about', { info, about, start, recipes })
   },
 
   search(req, res) {
-    const page_title = 'Foodfy | Search'
+    const info = {
+      page_title: 'Search',
+    }
 
-    return res.render('site/search', { page_title })
+    return res.render('site/search', { info })
   },
 
   chefs(req, res) {
-    const page_title = 'Foodfy | Chefs'
+    const info = {
+      page_title: 'Foodfy | Chefs',
+    }
 
-    return res.render('site/chefs/index', { page_title })
+    return res.render('site/chefs/index', { info })
   },
 }

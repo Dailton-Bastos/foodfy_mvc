@@ -89,6 +89,32 @@ img {
   }
 }
 
+.btn {
+  width: 121px;
+  padding: 10px;
+  border: 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  display: inline-block;
+  text-align: center;
+}
+
+.btn:hover {
+  opacity: 0.8;
+}
+
+.btn-primary {
+  background-color: var(--purple);
+}
+
+.btn-danger {
+  background-color: var(--danger);
+  margin-right: 5px;
+}
+
 /* Site Header */
 .header-site {
   display: flex;
@@ -413,7 +439,13 @@ img {
 .show-recipe {
   display: flex;
   flex-direction: column;
-  margin-top: 5rem;
+  max-width: 940px;
+  margin: 3rem auto 0;
+  padding: 0 1rem;
+}
+
+.container .show-recipe {
+  padding: 0;
 }
 
 .recipe-full-image img {
@@ -509,4 +541,222 @@ img {
   padding-bottom: 1.5rem;
 }
 
-/* Show Chef */
+/* Area Admin */
+/* Header */
+.menu-admin {
+  padding: 0 calc((100% - 940px) / 2);
+  height: 80px;
+  background-color: var(--dark);
+  display: flex;
+  align-items: center;
+}
+
+.menu-logo {
+  padding: 0 1rem;
+}
+
+.menu-nav.admin ul {
+  margin-left: 5rem;
+}
+
+.menu-nav.admin ul a {
+  color: #fff;
+  opacity: 0.5;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.menu-nav.admin ul a:hover {
+  opacity: 1;
+}
+
+.content-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5rem 0 3rem;
+  order: -1;
+}
+
+.header-btn {
+  display: flex;
+}
+
+@media (max-width: 720px) {
+  .content-header {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .content-header h1 {
+    margin-bottom: 10px;
+  }
+}
+
+/* Admin Recipes */
+.recipes-list {
+  padding: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.admin-recipe {
+  margin-right: 2rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-grow: 1;
+  width: 320px;
+  border-bottom: 1px solid #6558c3;
+  padding: 1rem;
+}
+
+.admin-recipe .img {
+  padding-right: 2rem;
+}
+
+.admin-recipe .img img {
+  max-width: 170px;
+  border-radius: 8px;
+}
+
+.details p {
+  font-size: 1.8rem;
+  color: var(--font-color);
+  padding-bottom: 5px;
+}
+
+.details span {
+  font-size: 1.4rem;
+  color: #777;
+}
+
+.details a {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: var(--purple);
+  padding: 1rem 0;
+  max-width: 63px;
+  text-transform: capitalize;
+}
+
+@media (max-width: 600px) {
+  .recipes-list,
+  .admin-recipe {
+    flex-direction: column;
+  }
+
+  .details p {
+    font-size: 2rem;
+  }
+
+  .details span,
+  .details a {
+    font-size: 1.8rem;
+  }
+
+  .recipes-list {
+    padding: 1rem;
+  }
+
+  .admin-recipe {
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+
+  .admin-recipe .img {
+    padding: 0;
+  }
+
+  .admin-recipe .img img {
+    max-width: 100%;
+  }
+
+  .details {
+    margin-top: 1rem;
+  }
+}
+
+/* New Content Admin */
+.content-form,
+.form-inputs {
+  display: flex;
+  flex-direction: column;
+  order: 2;
+}
+
+.form-inputs {
+  margin: 1rem 0;
+}
+
+.form-inputs label {
+  font-size: 1.6rem;
+  color: var(--dark);
+  font-weight: bold;
+  margin: 1rem 0;
+}
+
+.form-inputs input,
+select {
+  height: 40px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 1rem;
+  font-size: 1.6rem;
+  margin-bottom: 3rem;
+}
+
+.form-inputs textarea {
+  border: 1px solid #ddd;
+  resize: vertical;
+  padding: 1rem;
+}
+
+.form-inputs select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  color: #999;
+  font-size: 1.6rem;
+}
+
+.ingre-group,
+.prep-group {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.ingre-group button,
+.prep-group button {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--white);
+  background-color: var(--danger);
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  border: 2px solid var(--white);
+}
+
+.ingre-group + .ingre-group button,
+.prep-group + .prep-group button {
+  display: flex;
+}
+
+.form-inputs span {
+  font-size: 1.6rem;
+  color: var(--purple);
+  font-weight: bold;
+  max-width: 194px;
+  display: block;
+  margin-bottom: 3rem;
+  cursor: pointer;
+}
