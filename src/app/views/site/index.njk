@@ -1,0 +1,23 @@
+{% extends "_layout/default.njk" %}
+
+{% block body %}
+  {% include "./header.njk" %}
+
+  <section class="container">
+    <div class="banner">
+
+      <div class="banner-text">
+        <h1>{{ about.title }}</h1>
+        <p>{{ about.description }}</p>
+      </div>
+
+      <img src="/images/chef.png" alt="Chef">
+    </div>
+
+   <div class="recipes-home">
+    <h2>Mais acessadas</h2>
+
+    {% include "./home_recipes.njk" %}
+   </div>
+  </section>
+{% endblock %}

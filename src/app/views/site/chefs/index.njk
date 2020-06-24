@@ -1,0 +1,11 @@
+{% extends "_layout/default.njk" %}
+
+{% block body %}
+  {% include "../header.njk" %}
+
+  <div class="container">
+    {% include "../../_partials/chefs.njk" %}
+
+    {% include "../../_partials/pagination.njk" %}
+  </div>
+{% endblock %}
