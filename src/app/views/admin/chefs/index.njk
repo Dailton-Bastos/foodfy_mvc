@@ -1,0 +1,91 @@
+{% extends "_layout/default.njk" %}
+
+{% block body %}
+  {% include "../header.njk" %}
+
+  <section class="container">
+    <div class="content-header">
+      <h1>{{ info.content_title }}</h1>
+      <div class="new-content">
+        <a href="/admin/chefs/new" class="btn btn-primary">Novo chef</a>
+      </div>
+    </div>
+
+    <ul class="list-chefs">
+      <li class="chef">
+        <div class="chef-avatar">
+          <img src="https://avatars0.githubusercontent.com/u/36246937?v=4" alt="Dailton Bastos">
+        </div>
+        <div class="chef-info">
+          <p>Dailton Bastos</p>
+          <a href="/admin/chefs/1">visualizar</a>
+        </div>
+      </li>
+      <li class="chef">
+        <div class="chef-avatar">
+          <img src="https://avatars0.githubusercontent.com/u/36246937?v=4" alt="Dailton Bastos">
+        </div>
+        <div class="chef-info">
+          <p>Dailton Bastos</p>
+          <a href="/admin/chefs/1">visualizar</a>
+        </div>
+      </li>
+      <li class="chef">
+        <div class="chef-avatar">
+          <img src="https://avatars0.githubusercontent.com/u/36246937?v=4" alt="Dailton Bastos">
+        </div>
+        <div class="chef-info">
+          <p>Dailton Bastos</p>
+          <a href="/admin/chefs/1">visualizar</a>
+        </div>
+      </li>
+      <li class="chef">
+        <div class="chef-avatar">
+          <img src="https://avatars0.githubusercontent.com/u/36246937?v=4" alt="Dailton Bastos">
+        </div>
+        <div class="chef-info">
+          <p>Dailton Bastos</p>
+          <a href="#">visualizar</a>
+        </div>
+      </li>
+      <li class="chef">
+        <div class="chef-avatar">
+          <img src="https://avatars0.githubusercontent.com/u/36246937?v=4" alt="Dailton Bastos">
+        </div>
+        <div class="chef-info">
+          <p>Dailton Bastos</p>
+          <a href="#">visualizar</a>
+        </div>
+      </li>
+      <li class="chef">
+        <div class="chef-avatar">
+          <img src="https://avatars0.githubusercontent.com/u/36246937?v=4" alt="Dailton Bastos">
+        </div>
+        <div class="chef-info">
+          <p>Dailton Bastos</p>
+          <a href="#">visualizar</a>
+        </div>
+      </li>
+      <li class="chef">
+        <div class="chef-avatar">
+          <img src="https://avatars0.githubusercontent.com/u/36246937?v=4" alt="Dailton Bastos">
+        </div>
+        <div class="chef-info">
+          <p>Dailton Bastos</p>
+          <a href="#">visualizar</a>
+        </div>
+      </li>
+      <li class="chef">
+        <div class="chef-avatar">
+          <img src="https://avatars0.githubusercontent.com/u/36246937?v=4" alt="Dailton Bastos">
+        </div>
+        <div class="chef-info">
+          <p>Dailton Bastos</p>
+          <a href="#">visualizar</a>
+        </div>
+      </li>
+    </ul>
+
+  {% include "_partials/pagination.njk" %}
+  </section>
+{% endblock %}

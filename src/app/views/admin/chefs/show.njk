@@ -6,10 +6,27 @@
   <section class="container">
     <div class="content-header">
       <h1>{{ info.content_title }}</h1>
-      <div class="new-content">
-        <a href="/admin/recipes/new" class="btn btn-primary">Nova receita</a>
+      <div class="header-btn">
+        <form action="#">
+          <input type="hidden" />
+          <button type="submit" class="btn btn-danger">Deletar</button>
+        </form>
+        <a href="/admin/chefs/1/edit" class="btn btn-primary">Editar chef</a>
       </div>
     </div>
+
+    <div class="chef-bio">
+      <div class="avatar">
+        <img
+          src="https://avatars0.githubusercontent.com/u/36246937?v=4"
+          alt="Dailton Bastos"
+        />
+      </div>
+      <h1>Dailton Bastos</h1>
+      <span>4 receitas</span>
+    </div>
+
+    <h2>Receitas</h2>
 
     <ul class="recipes-list">
       <li class="admin-recipe">
