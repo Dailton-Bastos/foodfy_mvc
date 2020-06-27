@@ -11,20 +11,22 @@
     <input type="text" id="recipe_image"/>
 
     <label for="ingredients">Ingredientes</label>
-    <div class="ingre-group">
-      <input type="text" id="ingredients" />
-      <button type="button">X</button>
-    </div>
-
-    <span>Adicionar novo ingrediente</span>
+      <div class="ingredients">
+        <div class="ingre-group" data-child>
+          <input type="text" id="ingredients" name="ingredients[]"/>
+          <button type="button" data-btn="remove">X</button>
+        </div>
+      </div>
+      <a href="#" data-btn="ingred">Adicionar novo ingrediente</a>
 
     <label for="preparation">Modo de preparo</label>
-    <div class="prep-group">
-      <input type="text" id="preparation" />
-      <button type="button">X</button>
-    </div>
-
-    <span>Adicionar novo passo</span>
+      <div class="preparation">
+        <div class="prep-group" data-child>
+          <input type="text" id="preparation" name="preparation[]"/>
+          <button type="button" data-btn="remove">X</button>
+        </div>
+      </div>
+      <a href="#" data-btn="prep">Adicionar novo passo</a>
 
     <label for="information">Informações adicionais</label>
     <textarea id="information" cols="30" rows="10"></textarea>

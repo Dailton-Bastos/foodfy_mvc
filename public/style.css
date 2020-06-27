@@ -499,7 +499,7 @@ img {
 .recipe-ingredients h2::after,
 .recipe-preparation h2::after,
 .recipe-information h2::after {
-  content: 'esconder';
+  content: 'mostrar';
   font-size: 1.2rem;
   color: #999;
   font-weight: bold;
@@ -508,15 +508,15 @@ img {
   cursor: pointer;
 }
 
-.recipe-ingredients h2.hide::after,
-.recipe-information h2.hide::after,
-.recipe-preparation h2.hide::after {
-  content: 'mostrar';
+.recipe-ingredients h2.active::after,
+.recipe-information h2.active::after,
+.recipe-preparation h2.active::after {
+  content: 'esconder';
 }
 
 .recipe-ingredients ul,
 .recipe-preparation ul {
-  display: flex;
+  display: none;
   flex-direction: column;
   list-style: circle;
   list-style-position: inside;
@@ -532,10 +532,17 @@ img {
   animation: show_down 0.5s forwards;
 }
 
-.recipe-ingredients ul.hide,
-.recipe-preparation ul.hide,
-.recipe-information .info.hide {
+.recipe-information .info {
   display: none;
+}
+
+.recipe-ingredients ul.active,
+.recipe-preparation ul.active {
+  display: flex;
+}
+
+.recipe-information .info.active {
+  display: block;
 }
 
 .recipe-information .info {
@@ -618,6 +625,12 @@ img {
   width: 320px;
   border-bottom: 1px solid #6558c3;
   padding: 1rem;
+}
+
+.container .recipes-list,
+.container .admin-recipe {
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .admin-recipe .img {
@@ -718,8 +731,10 @@ select {
 
 .form-inputs textarea {
   border: 1px solid #ddd;
+  border-radius: 4px;
   resize: vertical;
   padding: 1rem;
+  font-size: 16px;
 }
 
 .form-inputs select {
@@ -729,15 +744,15 @@ select {
   font-size: 1.6rem;
 }
 
-.ingre-group,
-.prep-group {
+.ingredients .ingre-group,
+.preparation .prep-group {
   display: flex;
   flex-direction: column;
   position: relative;
 }
 
-.ingre-group button,
-.prep-group button {
+.ingredients .ingre-group button,
+.preparation .prep-group button {
   display: none;
   align-items: center;
   justify-content: center;
@@ -759,7 +774,7 @@ select {
   display: flex;
 }
 
-.form-inputs span {
+.form-inputs a {
   font-size: 1.6rem;
   color: var(--purple);
   font-weight: bold;
@@ -795,10 +810,4 @@ select {
 .chef-bio span {
   font-size: 2rem;
   color: #777;
-}
-
-.container .recipes-list,
-.container .admin-recipe {
-  padding-left: 0;
-  padding-right: 0;
 }
