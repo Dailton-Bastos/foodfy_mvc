@@ -77,6 +77,56 @@ function activeLinkMenu() {
   }
 }
 
+function paginate(selectedPage, totalPages) {
+  const pages = []
+  let oldPage
+
+  for (let currentPage = 1; currentPage <= totalPages; currentPage += 1) {
+    const firstAndLastPage = currentPage === 1 || currentPage === totalPages
+    const pagesAfterSelectedPage = currentPage <= selectedPage + 2
+    const pagesBeforeSelectedPage = currentPage >= selectedPage - 2
+
+    if (
+      firstAndLastPage ||
+      (pagesBeforeSelectedPage && pagesAfterSelectedPage)
+    ) {
+      if (oldPage && currentPage - oldPage > 2) {
+        pages.push('...')
+      }
+      if (oldPage && currentPage - oldPage === 2) {
+        pages.push(oldPage + 1)
+      }
+      pages.push(currentPage)
+
+      oldPage = currentPage
+    }
+  }
+  return pages
+}
+
+function activePaginate() {
+  const pagination = document.querySelector('[data-pagination]')
+
+  if (pagination) {
+    const page = +pagination.dataset.page
+    const total = +pagination.dataset.total
+    const pages = paginate(page, total)
+
+    let elements = ''
+
+    pages.forEach((value) => {
+      if (String(value).includes('...')) {
+        elements += `<li><span>${value}</span></li>`
+      } else {
+        elements += `<li><a href="?page=${value}">${value}</a></li>`
+      }
+    })
+
+    pagination.innerHTML = elements
+  }
+}
+
 recipeInfoAccordion()
 AddDynamicField()
 activeLinkMenu()
+activePaginate()

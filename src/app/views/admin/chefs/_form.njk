@@ -1,9 +1,21 @@
   <div class="form-inputs">
 
     <label for="name">Nome</label>
-    <input type="text" id="name"/>
+    <input
+      type="text"
+      id="name"
+      name="name"
+      value="{{ chef.name}}"
+      required
+    />
 
     <label for="avatar">Avatar</label>
-    <input type="text" id="avatar"/>
+    <input
+      type="text"
+      id="avatar"
+      name="avatar_url"
+      value="{{ chef.avatar_url}}"
+      required
+    />
 
   </div>

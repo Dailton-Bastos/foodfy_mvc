@@ -347,7 +347,8 @@ img {
   margin-top: 5rem;
 }
 
-.pagination ul a {
+.pagination ul a,
+.pagination ul li span {
   color: var(--purple);
   font-size: 1em;
   font-weight: bold;
@@ -384,9 +385,18 @@ img {
 .chef {
   display: flex;
   align-items: center;
-  margin: 0 1rem 2rem 0;
+  margin: 0 1rem 3rem 0;
   width: 100%;
   max-width: 22rem;
+}
+
+.chef-info {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-left: 2rem;
 }
 
 .chef-info p {
@@ -408,8 +418,8 @@ img {
 }
 
 .chef-avatar img {
-  margin-right: 20px;
-  min-width: 64px;
+  max-width: 64px;
+  width: 64px;
   height: 64px;
   border-radius: 50%;
   box-shadow: 3px 1px 6px -4px #000;
@@ -418,8 +428,6 @@ img {
 @media (max-width: 650px) {
   .list-chefs {
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
   }
 
   .chef {
@@ -430,10 +438,21 @@ img {
     padding: 2rem;
   }
 
+  .chef-avatar {
+    width: 100%;
+    text-align: center;
+    margin: 1rem 0;
+  }
+
   .chef-avatar img {
-    width: 100px;
+    display: inline-block;
+    min-width: 100px;
     height: 100px;
-    margin: 2rem;
+  }
+
+  .chef-info {
+    padding: 0;
+    align-items: center;
   }
 
   .chef-info p,
@@ -795,7 +814,8 @@ select {
 
 .chef-bio .avatar img {
   max-width: 200px;
-  max-height: 200px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   box-shadow: 0px 2px 6px -2px rgba(0, 0, 0, 0.6);
   margin-bottom: 3rem;
@@ -810,4 +830,15 @@ select {
 .chef-bio span {
   font-size: 2rem;
   color: #777;
+}
+
+@media (max-width: 720px) {
+  .chef-bio .avatar img {
+    width: 150px;
+    height: 150px;
+  }
+
+  .chef-bio h1 {
+    font-size: 3rem;
+  }
 }
