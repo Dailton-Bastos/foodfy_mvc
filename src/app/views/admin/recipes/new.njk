@@ -4,7 +4,11 @@
   {% include "../header.njk" %}
 
   <section class="container">
-    <form action="#" class="content-form">
+    <form
+      action="/admin/recipes"
+      method="POST"
+      class="content-form"
+    >
     {# Inputs #}
     {% include "./_form.njk" %}
       <div class="content-header">

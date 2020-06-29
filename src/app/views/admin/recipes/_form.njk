@@ -1,33 +1,91 @@
   <div class="form-inputs">
     <label for="chef">Chef</label>
-    <select id="chef">
-      <option value="#" selected disabled>Selecione um chef</option>
-      <option value="#">Dailton Bastos</option>
-      <option value="#">Dailton Bastos</option>
-      <option value="#">Dailton Bastos</option>
+    <select name="chef">
+      <option value="" selected disabled>Selecione um chef</option>
+
+      {% for chef in chefs %}
+        <option
+          value="{{ chef.id }}"
+          {% if recipe.chef_id === chef.id %}
+            selected
+          {% endif %}
+        >
+          {{ chef.name }}
+        </option>
+      {% endfor %}
     </select>
 
+    <label for="title">Nome da receita</label>
+    <input
+      name="title"
+      id="title"
+      value="{{ recipe.title }}"
+    >
+
     <label for="recipe_image">Imagem da receita</label>
-    <input type="text" id="recipe_image"/>
+    <input
+      type="url"
+      id="recipe_image"
+      name="image_url"
+      value="{{ recipe.image_url }}"
+    />
 
     <label for="ingredients">Ingredientes</label>
       <div class="ingredients">
-        <div class="ingre-group" data-child>
-          <input type="text" id="ingredients" name="ingredients[]"/>
-          <button type="button" data-btn="remove">X</button>
-        </div>
+
+        {% if recipe.ingredients %}
+          {% for ingredient in recipe.ingredients %}
+            <div class="ingre-group" data-child>
+              <input
+                type="text"
+                id="ingredients"
+                name="ingredients[]"
+                value="{{ingredient  }}"
+              />
+              <button type="button" data-btn="remove">X</button>
+            </div>
+          {% endfor %}
+
+        {% else %}
+          <div class="ingre-group" data-child>
+            <input type="text" id="ingredients" name="ingredients[]" />
+            <button type="button" data-btn="remove">X</button>
+          </div>
+        {% endif %}
+
       </div>
       <a href="#" data-btn="ingred">Adicionar novo ingrediente</a>
 
     <label for="preparation">Modo de preparo</label>
       <div class="preparation">
-        <div class="prep-group" data-child>
-          <input type="text" id="preparation" name="preparation[]"/>
-          <button type="button" data-btn="remove">X</button>
-        </div>
+
+        {% if recipe.preparation %}
+          {% for preparation in recipe.preparation %}
+            <div class="prep-group" data-child>
+              <input
+                type="text"
+                id="preparation"
+                name="preparation[]"
+                value="{{ preparation }}"
+              />
+              <button type="button" data-btn="remove">X</button>
+            </div>
+          {% endfor %}
+          {% else %}
+            <div class="prep-group" data-child>
+              <input type="text" id="preparation" name="preparation[]"/>
+              <button type="button" data-btn="remove">X</button>
+            </div>
+        {% endif %}
+
       </div>
       <a href="#" data-btn="prep">Adicionar novo passo</a>
 
     <label for="information">Informações adicionais</label>
-    <textarea id="information" cols="30" rows="10"></textarea>
+    <textarea
+      id="information"
+      cols="30"
+      rows="10"
+      name="information"
+      >{{ recipe.information }}</textarea>
   </div>

@@ -13,12 +13,17 @@ routes.get('/app/search', SiteController.search)
 routes.get('/app/chefs', SiteController.chefs)
 routes.get('/app/recipes/:id', SiteController.showRecipe)
 
-// Admin
+// Admin Recipes
 routes.get('/admin/recipes', RecipesController.index)
-routes.get('/admin/recipes/new', RecipesController.new)
+routes.get('/admin/recipes/new', RecipesController.newRecipe)
 routes.get('/admin/recipes/:id', RecipesController.show)
 routes.get('/admin/recipes/:id/edit', RecipesController.edit)
 
+routes.post('/admin/recipes', RecipesController.post)
+routes.put('/admin/recipes/:id', RecipesController.put)
+routes.delete('/admin/recipes/:id', RecipesController.deleteRecipe)
+
+// Admin Chefs
 routes.get('/admin/chefs', ChefsController.index)
 routes.get('/admin/chefs/new', ChefsController.newChef)
 routes.get('/admin/chefs/:id', ChefsController.show)

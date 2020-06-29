@@ -11,75 +11,29 @@
       </div>
     </div>
 
-    <ul class="recipes-list">
-      <li class="admin-recipe">
-        <div class="img">
-          <img src="/images/recipes/burger.png" alt="Asinha" />
-        </div>
 
-        <div class="details">
-          <p>Triplo bacon burguer</p>
-          <span>por Vania Steroski</span>
-          <a href="/admin/recipes/1">visualizar</a>
-        </div>
-      </li>
-      <li class="admin-recipe">
-        <div class="img">
-          <img src="/images/recipes/burger.png" alt="Asinha" />
-        </div>
+    {% if recipes[0] %}
+      <ul class="recipes-list">
+        {% for recipe in recipes %}
+          <li class="admin-recipe">
+            <div class="img">
+              <img src="{{ recipe.image_url }}" alt="{{ recipe.title }}" />
+            </div>
 
-        <div class="details">
-          <p>Triplo bacon burguer</p>
-          <span>por Vania Steroski</span>
-          <a href="/admin/recipes/1">visualizar</a>
-        </div>
-      </li>
-      <li class="admin-recipe">
-        <div class="img">
-          <img src="/images/recipes/burger.png" alt="Asinha" />
-        </div>
+            <div class="details">
+              <p>{{ recipe.title }}</p>
+              <span>por {{ recipe.chef }}</span>
+              <a href="/admin/recipes/{{ recipe.id }}">visualizar</a>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <h1>Nenhuma receita encontrada</h1>
+    {% endif %}
 
-        <div class="details">
-          <p>Triplo bacon burguer</p>
-          <span>por Vania Steroski</span>
-          <a href="/admin/recipes/1">visualizar</a>
-        </div>
-      </li>
-      <li class="admin-recipe">
-        <div class="img">
-          <img src="/images/recipes/burger.png" alt="Asinha" />
-        </div>
-
-        <div class="details">
-          <p>Triplo bacon burguer</p>
-          <span>por Vania Steroski</span>
-          <a href="/admin/recipes/1">visualizar</a>
-        </div>
-      </li>
-      <li class="admin-recipe">
-        <div class="img">
-          <img src="/images/recipes/burger.png" alt="Asinha" />
-        </div>
-
-        <div class="details">
-          <p>Triplo bacon burguer</p>
-          <span>por Vania Steroski</span>
-          <a href="/admin/recipes/1">visualizar</a>
-        </div>
-      </li>
-      <li class="admin-recipe">
-        <div class="img">
-          <img src="/images/recipes/burger.png" alt="Asinha" />
-        </div>
-
-        <div class="details">
-          <p>Triplo bacon burguer</p>
-          <span>por Vania Steroski</span>
-          <a href="/admin/recipes/1">visualizar</a>
-        </div>
-      </li>
-    </ul>
-
-  {% include "_partials/pagination.njk" %}
+    {% if pagination.total > 1 %}
+      {% include "_partials/pagination.njk" %}
+    {% endif %}
   </section>
 {% endblock %}

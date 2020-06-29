@@ -1,33 +1,106 @@
+const {
+  create,
+  selectChef,
+  find,
+  update,
+  destroy,
+  paginate,
+} = require('../../models/Recipe')
+
 module.exports = {
   index(req, res) {
     const info = {
       page_title: 'Foodfy | Gerenciar receitas',
       content_title: 'Gerenciar receitas',
     }
-    return res.render('admin/recipes/index', { info })
-  },
 
-  show(req, res) {
-    const info = {
-      page_title: 'Foodfy | Triplo Bacon Burguer',
-      content_title: 'Receita: Triplo Bacon Burguer',
+    let { page, limit } = req.query
+
+    page = page || 1
+    limit = Number(limit || 6)
+    const offset = limit * (page - 1)
+
+    const params = {
+      page,
+      limit,
+      offset,
+      cb(recipes) {
+        const pagination = {
+          total: Math.ceil(recipes[0].total / limit),
+          page,
+        }
+        return res.render('admin/recipes/index', { info, recipes, pagination })
+      },
     }
-    return res.render('admin/recipes/show', { info })
+
+    paginate(params)
   },
 
-  new(req, res) {
+  newRecipe(req, res) {
     const info = {
       page_title: 'Foodfy | Nova receita',
       content_title: 'Criando receita',
     }
-    return res.render('admin/recipes/new', { info })
+
+    selectChef(res, (chefs) => {
+      return res.render('admin/recipes/new', { info, chefs })
+    })
+  },
+
+  post(req, res) {
+    const keys = Object.keys(req.body)
+    const isValid = keys.every((key) => req.body[key] !== '')
+
+    if (!isValid) res.send('Todos os campos são obrigatório')
+
+    create(req.body, res, (recipe) => {
+      return res.redirect(`/admin/recipes/${recipe.id}`)
+    })
+  },
+
+  show(req, res) {
+    const { id } = req.params
+
+    find(id, res, (recipe) => {
+      const info = {
+        page_title: `Foodfy | ${recipe.title}`,
+        content_title: `Receita: ${recipe.title}`,
+      }
+
+      return res.render('admin/recipes/show', { info, recipe })
+    })
   },
 
   edit(req, res) {
-    const info = {
-      page_title: 'Foodfy | Editando receita',
-      content_title: 'Editando receita',
-    }
-    return res.render('admin/recipes/edit', { info })
+    const { id } = req.params
+    find(id, res, (recipe) => {
+      selectChef(res, (chefs) => {
+        const info = {
+          page_title: `Editando | ${recipe.title}`,
+          content_title: 'Editando receita',
+        }
+
+        return res.render('admin/recipes/edit', { info, id, recipe, chefs })
+      })
+    })
+  },
+
+  put(req, res) {
+    const { id } = req.body
+
+    const keys = Object.keys(req.body)
+    const isValid = keys.every((key) => req.body[key] !== '')
+
+    if (!isValid) res.send('Todos os campos são obrigatório')
+
+    update(req.body, res, () => {
+      return res.redirect(`/admin/recipes/${id}`)
+    })
+  },
+
+  deleteRecipe(req, res) {
+    const { id } = req.params
+
+    destroy(id, res, () => res.redirect(`/admin/recipes`))
   },
 }

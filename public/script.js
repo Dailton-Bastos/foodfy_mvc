@@ -126,7 +126,22 @@ function activePaginate() {
   }
 }
 
+function removeInputEdit() {
+  const btnRemove = document.querySelectorAll('[data-btn="remove"]')
+
+  function removeInput(event) {
+    event.target.parentElement.remove()
+  }
+
+  if (btnRemove) {
+    btnRemove.forEach((btn) => {
+      btn.addEventListener('click', removeInput)
+    })
+  }
+}
+
 recipeInfoAccordion()
 AddDynamicField()
 activeLinkMenu()
 activePaginate()
+removeInputEdit()
