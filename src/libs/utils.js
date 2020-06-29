@@ -7,4 +7,15 @@ module.exports = {
 
     return { day, month, year, iso: `${year}-${month}-${day}` }
   },
+
+  paginate(page, limit) {
+    page = page || 1
+    const offset = limit * (page - 1)
+
+    return {
+      page,
+      limit,
+      offset,
+    }
+  },
 }

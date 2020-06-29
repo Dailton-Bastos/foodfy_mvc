@@ -3,11 +3,18 @@ const { date } = require('../../libs/utils')
 const db = require('../../config/database')
 
 module.exports = {
-  all(res, cb) {
-    db.query(`SELECT * FROM chefs ORDER BY name`, (err, results) => {
-      if (err || !results.rows) {
-        throw Error(err)
-      }
+  all(res, params, cb) {
+    const { limit, offset } = params
+
+    const query = `
+      SELECT chefs.*,
+      (SELECT count(*) FROM chefs) AS total
+      FROM chefs
+      LIMIT $1 OFFSET $2
+    `
+
+    db.query(query, [limit, offset], (err, results) => {
+      if (err || !results.rows) throw Error(err)
       return cb(results.rows)
     })
   },
@@ -51,6 +58,28 @@ module.exports = {
     })
   },
 
+  recipesChef(id, res, params, cb) {
+    const { limit, offset } = params
+
+    const query = `
+      SELECT recipes.*,
+      (SELECT count(*) FROM recipes WHERE chef_id = $1) AS total
+      FROM recipes
+      WHERE chef_id = $1
+      GROUP BY recipes.id
+      ORDER BY recipes.title
+      LIMIT $2 OFFSET $3
+      `
+
+    db.query(query, [id, limit, offset], (err, results) => {
+      if (err || !results.rows) {
+        throw Error(err)
+      }
+
+      return cb(results.rows)
+    })
+  },
+
   update(data, res, cb) {
     const query = `UPDATE chefs SET name=($1), avatar_url=($2) WHERE id=$3`
 
@@ -77,23 +106,6 @@ module.exports = {
         throw Error(err)
       }
       return cb()
-    })
-  },
-
-  paginate(params) {
-    const { limit, offset, cb } = params
-
-    const query = `SELECT chefs.*, (SELECT count(*) FROM chefs) AS total
-      FROM chefs
-      ORDER BY name
-      LIMIT $1 OFFSET $2`
-
-    db.query(query, [limit, offset], (err, results) => {
-      if (err || !results.rows) {
-        throw Error(err)
-      }
-
-      return cb(results.rows)
     })
   },
 }
