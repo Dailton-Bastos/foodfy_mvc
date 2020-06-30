@@ -1,4 +1,4 @@
-const { mostAccessed, all, find } = require('../../models/Recipe')
+const { mostAccessed, all, find, search } = require('../../models/Recipe')
 const {
   all: allChefs,
   find: findChef,
@@ -58,6 +58,29 @@ module.exports = {
     })
   },
 
+  searchRecipe(req, res) {
+    const { page, filter } = req.query
+
+    const params = paginate(page, 3)
+
+    params.filter = filter
+
+    const info = {
+      page_title: `Buscando por ${filter}`,
+    }
+
+    search(res, params, (recipes) => {
+      const total = recipes[0] ? Math.ceil(recipes[0].total / params.limit) : 0
+
+      const pagination = {
+        total,
+        page: params.page,
+        filter: params.filter,
+      }
+      return res.render('site/search', { info, recipes, pagination, filter })
+    })
+  },
+
   about(req, res) {
     const info = {
       page_title: 'Foodfy | About',
@@ -76,14 +99,6 @@ module.exports = {
     }
 
     return res.render('site/about', { info, about, start, recipes })
-  },
-
-  search(req, res) {
-    const info = {
-      page_title: 'Search',
-    }
-
-    return res.render('site/search', { info })
   },
 
   chefs(req, res) {

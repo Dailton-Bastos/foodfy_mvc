@@ -145,27 +145,6 @@ module.exports = {
     })
   },
 
-  paginate(params) {
-    const { limit, offset, cb } = params
-
-    const query = `
-      SELECT recipes.*,
-      chefs.name AS chef,
-      (SELECT count(*) FROM recipes) AS total
-      FROM recipes
-      LEFT JOIN chefs ON (recipes.chef_id = chefs.id)
-      ORDER BY recipes.title ASC
-      LIMIT $1 OFFSET $2`
-
-    db.query(query, [limit, offset], (err, results) => {
-      if (err || !results.rows) {
-        throw Error(err)
-      }
-
-      return cb(results.rows)
-    })
-  },
-
   mostAccessed(res, cb) {
     const query = `
     SELECT recipes.id, recipes.title, recipes.image_url, chefs.name AS chef
@@ -178,6 +157,42 @@ module.exports = {
 
     db.query(query, (err, results) => {
       if (err || !results.rows) throw Error(err)
+
+      return cb(results.rows)
+    })
+  },
+
+  search(res, params, cb) {
+    const { filter, limit, offset } = params
+
+    let query = ''
+    let filterQuery = ''
+    let totalQuery = `(SELECT count(*) AS total FROM recipes)`
+
+    if (filter) {
+      filterQuery = `WHERE recipes.title ILIKE '%${filter}%'`
+
+      totalQuery = `(SELECT count(*) FROM recipes ${filterQuery}) AS total`
+    }
+
+    query = `
+      SELECT recipes.id,
+      recipes.image_url,
+      recipes.title,
+      chefs.name AS chef,
+      ${totalQuery}
+      FROM recipes
+      LEFT JOIN chefs
+      ON (recipes.chef_id = chefs.id)
+      ${filterQuery}
+      ORDER BY recipes.title
+      LIMIT $1 OFFSET $2
+    `
+
+    db.query(query, [limit, offset], (err, results) => {
+      if (err || !results.rows) {
+        throw Error(err)
+      }
 
       return cb(results.rows)
     })

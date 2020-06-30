@@ -4,21 +4,30 @@
   {% include "./header.njk" %}
 
   <div class="container">
-    <h2>Buscando por "bacon"</h2>
+    <h2>Buscando por "{{ filter }}"</h2>
     <section class="list-recipes">
-
-      <div class="recipe">
-        <a href="/app/recipes/1">
-          <img src="/images/recipes/burger.png" alt="Burger">
-
-          <div class="info">
-            <p>Triplo bacon burger</p>
-            <span>por Jorge Relato</span>
-          </div>
-        </a>
-      </div>
-
+      {% if recipes[0] %}
+        <ul class="recipes-site">
+          {% for recipe in recipes %}
+            <li>
+              <a href="/app/recipes/{{ recipe.id }}">
+                <div class="recipe-item">
+                  <img src="{{ recipe.image_url }}" alt="{{ recipe.title }}">
+                  <div class="recipe-info">
+                    <p>{{ recipe.title }}</p>
+                    <span>por {{ recipe.chef }}</span>
+                  </div>
+                </div>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+      <p>Nenhum resultado encontrado</p>
+      {% endif %}
     </section>
-    {% include "../_partials/pagination.njk" %}
+    {% if pagination.total > 1 %}
+      {% include "_partials/pagination.njk" %}
+    {% endif %}
   </div>
 {% endblock %}

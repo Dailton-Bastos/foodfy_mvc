@@ -14,8 +14,14 @@
       </ul>
     </nav>
 
-    <form action="#" method="get">
-      <input type="text" placeholder="Buscar uma receita">
+    <form action="/app/search" method="get">
+      <input
+        type="text"
+        name="filter"
+        placeholder="Buscar uma receita"
+        required
+        value={{ filter }}
+      >
       <button type="submit">Buscar</button>
     </form>
   </div>

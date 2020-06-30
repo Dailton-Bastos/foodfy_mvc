@@ -110,6 +110,7 @@ function activePaginate() {
   if (pagination) {
     const page = +pagination.dataset.page
     const total = +pagination.dataset.total
+    const { filter } = pagination.dataset
     const pages = paginate(page, total)
 
     let elements = ''
@@ -117,6 +118,8 @@ function activePaginate() {
     pages.forEach((value) => {
       if (String(value).includes('...')) {
         elements += `<li><span>${value}</span></li>`
+      } else if (filter) {
+        elements += `<li><a href="?page=${value}&filter=${filter}">${value}</a></li>`
       } else {
         elements += `<li><a href="?page=${value}">${value}</a></li>`
       }
