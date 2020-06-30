@@ -7,9 +7,13 @@ module.exports = {
     const { limit, offset } = params
 
     const query = `
-      SELECT chefs.*,
-      (SELECT count(*) FROM chefs) AS total
+      SELECT chefs.*, COUNT(recipes) AS total_recipes,
+      (SELECT DISTINCT count(*) FROM chefs) AS total
       FROM chefs
+      LEFT JOIN recipes
+      ON chefs.id = recipes.chef_id
+      GROUP BY chefs.id
+      ORDER BY chefs.name
       LIMIT $1 OFFSET $2
     `
 

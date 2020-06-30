@@ -14,10 +14,25 @@
       <img src="/images/chef.png" alt="Chef">
     </div>
 
-   <div class="recipes-home">
+   <div class="most_accessed">
     <h2>Mais acessadas</h2>
 
-    {% include "./home_recipes.njk" %}
+    <ul class="recipes-site">
+      {% for recipe in recipes %}
+        <li>
+          <a href="/app/recipes/{{ recipe.id }}">
+            <div class="recipe-item">
+              <img src="{{ recipe.image_url }}" alt="{{ recipe.title }}">
+              <div class="recipe-info">
+                <p>{{ recipe.title }}</p>
+                <span>por {{ recipe.chef }}</span>
+              </div>
+            </div>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+
    </div>
   </section>
 {% endblock %}

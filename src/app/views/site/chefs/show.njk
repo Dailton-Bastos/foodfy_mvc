@@ -1,0 +1,50 @@
+{% extends "_layout/default.njk" %}
+
+{% block body %}
+  {% include "../header.njk" %}
+
+  <section class="container">
+
+    <div class="chef-bio">
+      <div class="avatar">
+        <img src="{{ chef.avatar_url }}" alt="{{ chef.name }}" />
+      </div>
+
+      <h1>{{ chef.name }}</h1>
+
+      {% if chef.total_recipes > 1 %}
+        <span>{{ chef.total_recipes }} receitas</span>
+      {% else %}
+        <span>{{ chef.total_recipes }} receita</span>
+      {% endif %}
+    </div>
+
+    <h2>Receitas</h2>
+
+    {% if recipes[0] %}
+      <ul class="recipes-list">
+        {% for recipe in recipes %}
+          <li class="admin-recipe">
+            <div class="img">
+              <img src="{{ recipe.image_url }}" alt="{{ recipe.title }}" />
+            </div>
+
+            <div class="details">
+              <p>{{ recipe.title }}</p>
+              <span>por {{ chef.name }}</span>
+              <a href="/app/recipes/{{ recipe.id }}">visualizar</a>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>Nenhuma receita encontrada</p>
+    {% endif %}
+
+    {% if pagination.total > 1 %}
+      {% include "_partials/pagination.njk" %}
+    {% endif %}
+
+  </section>
+
+{% endblock %}

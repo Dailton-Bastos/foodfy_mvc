@@ -2,14 +2,20 @@ const db = require('../../config/database')
 const { date } = require('../../libs/utils')
 
 module.exports = {
-  all(res, cb) {
+  all(res, params, cb) {
+    const { limit, offset } = params
+
     const query = `
-    SELECT recipes.*, chefs.name AS chef
+    SELECT recipes.*,
+    (SELECT count(*) FROM recipes) AS total,
+    chefs.name AS chef
     FROM recipes
-    LEFT JOIN chefs ON (recipes.chef_id = chefs.id)
+    LEFT JOIN chefs
+    ON (recipes.chef_id = chefs.id)
     ORDER BY recipes.title ASC
+    LIMIT $1 OFFSET $2
     `
-    db.query(query, (err, results) => {
+    db.query(query, [limit, offset], (err, results) => {
       if (err || !results.rows) {
         throw Error(err)
       }
@@ -155,6 +161,23 @@ module.exports = {
       if (err || !results.rows) {
         throw Error(err)
       }
+
+      return cb(results.rows)
+    })
+  },
+
+  mostAccessed(res, cb) {
+    const query = `
+    SELECT recipes.id, recipes.title, recipes.image_url, chefs.name AS chef
+    FROM recipes
+    INNER JOIN chefs
+    ON recipes.chef_id = chefs.id
+    ORDER BY random()
+    LIMIT 6
+    `
+
+    db.query(query, (err, results) => {
+      if (err || !results.rows) throw Error(err)
 
       return cb(results.rows)
     })

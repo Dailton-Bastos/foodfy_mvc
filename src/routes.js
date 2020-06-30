@@ -11,6 +11,7 @@ routes.get('/app/recipes', SiteController.recipes)
 routes.get('/app/about', SiteController.about)
 routes.get('/app/search', SiteController.search)
 routes.get('/app/chefs', SiteController.chefs)
+routes.get('/app/chefs/:id', SiteController.showChef)
 routes.get('/app/recipes/:id', SiteController.showRecipe)
 
 // Admin Recipes

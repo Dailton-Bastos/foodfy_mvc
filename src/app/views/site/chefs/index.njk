@@ -5,78 +5,23 @@
 
   <div class="container">
     <ul class="list-chefs">
-      <li class="chef">
-        <div class="chef-avatar">
-          <img src="https://avatars0.githubusercontent.com/u/36246937?v=4" alt="Dailton Bastos">
-        </div>
-        <div class="chef-info">
-          <p>Dailton Bastos</p>
-          <span>4 receitas</span>
-        </div>
-      </li>
-      <li class="chef">
-        <div class="chef-avatar">
-          <img src="https://avatars0.githubusercontent.com/u/36246937?v=4" alt="Dailton Bastos">
-        </div>
-        <div class="chef-info">
-          <p>Dailton Bastos</p>
-          <span>4 receitas</span>
-        </div>
-      </li>
-      <li class="chef">
-        <div class="chef-avatar">
-          <img src="https://avatars0.githubusercontent.com/u/36246937?v=4" alt="Dailton Bastos">
-        </div>
-        <div class="chef-info">
-          <p>Dailton Bastos</p>
-          <span>4 receitas</span>
-        </div>
-      </li>
-      <li class="chef">
-        <div class="chef-avatar">
-          <img src="https://avatars0.githubusercontent.com/u/36246937?v=4" alt="Dailton Bastos">
-        </div>
-        <div class="chef-info">
-          <p>Dailton Bastos</p>
-          <span>4 receitas</span>
-        </div>
-      </li>
-      <li class="chef">
-        <div class="chef-avatar">
-          <img src="https://avatars0.githubusercontent.com/u/36246937?v=4" alt="Dailton Bastos">
-        </div>
-        <div class="chef-info">
-          <p>Dailton Bastos</p>
-          <span>4 receitas</span>
-        </div>
-      </li>
-      <li class="chef">
-        <div class="chef-avatar">
-          <img src="https://avatars0.githubusercontent.com/u/36246937?v=4" alt="Dailton Bastos">
-        </div>
-        <div class="chef-info">
-          <p>Dailton Bastos</p>
-          <span>4 receitas</span>
-        </div>
-      </li>
-      <li class="chef">
-        <div class="chef-avatar">
-          <img src="https://avatars0.githubusercontent.com/u/36246937?v=4" alt="Dailton Bastos">
-        </div>
-        <div class="chef-info">
-          <p>Dailton Bastos</p>
-          <span>4 receitas</span>
-        </div>
-      </li>
-      <li class="chef">
-        <div class="chef-avatar">
-          <img src="https://avatars0.githubusercontent.com/u/36246937?v=4" alt="Dailton Bastos">
-        </div>
-        <div class="chef-info">
-          <p>Dailton Bastos</p>
-          <span>4 receitas</span>
-        </div>
-      </li>
+      {% for chef in listChef %}
+        <li class="chef">
+          <div class="chef-avatar">
+            <a href="/app/chefs/{{ chef.id }}">
+              <img src="{{ chef.avatar_url }}" alt="{{ chef.name }}">
+            </a>
+          </div>
+          <div class="chef-info">
+            <p>{{ chef.name }}</p>
+            {% if chef.total_recipes > 1 %}
+              <span> {{ chef.total_recipes }} receitas</span>
+            {% else %}
+              <span> {{ chef.total_recipes }} receita</span>
+            {% endif %}
+          </div>
+        </li>
+      {% endfor %}
     </ul>
 
     {% include "../../_partials/pagination.njk" %}

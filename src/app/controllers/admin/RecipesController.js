@@ -1,11 +1,13 @@
 const {
+  all,
   create,
   selectChef,
   find,
   update,
   destroy,
-  paginate,
 } = require('../../models/Recipe')
+
+const { paginate } = require('../../../libs/utils')
 
 module.exports = {
   index(req, res) {
@@ -14,26 +16,20 @@ module.exports = {
       content_title: 'Gerenciar receitas',
     }
 
-    let { page, limit } = req.query
+    const { page } = req.query
 
-    page = page || 1
-    limit = Number(limit || 6)
-    const offset = limit * (page - 1)
+    const params = paginate(page, 6)
 
-    const params = {
-      page,
-      limit,
-      offset,
-      cb(recipes) {
-        const pagination = {
-          total: Math.ceil(recipes[0].total / limit),
-          page,
-        }
-        return res.render('admin/recipes/index', { info, recipes, pagination })
-      },
-    }
+    all(res, params, (recipes) => {
+      const total = recipes[0] ? Math.ceil(recipes[0].total / params.limit) : 0
 
-    paginate(params)
+      const pagination = {
+        total,
+        page: params.page,
+      }
+
+      return res.render('admin/recipes/index', { info, recipes, pagination })
+    })
   },
 
   newRecipe(req, res) {
