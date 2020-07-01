@@ -18,7 +18,14 @@ module.exports = {
     `
 
     db.query(query, [limit, offset], (err, results) => {
-      if (err || !results.rows) throw Error(err)
+      if (err || !results.rows) {
+        return res.render('_partials/not-found', {
+          info: {
+            msg: 'Error ao listar chefs',
+            page_title: 'Error ou página não encontrada',
+          },
+        })
+      }
       return cb(results.rows)
     })
   },
@@ -34,7 +41,12 @@ module.exports = {
 
     db.query(query, values, (err, results) => {
       if (err || !results.rows[0]) {
-        throw Error(err)
+        return res.render('_partials/not-found', {
+          info: {
+            msg: 'Error ao salvar chef',
+            page_title: 'Error ou página não encontrada',
+          },
+        })
       }
       return cb(results.rows[0])
     })
@@ -55,7 +67,12 @@ module.exports = {
 
     db.query(query, values, (err, results) => {
       if (err || !results.rows[0]) {
-        throw Error(err)
+        return res.render('_partials/not-found', {
+          info: {
+            msg: 'Error ou chef não existe',
+            page_title: 'Error ou página não encontrada',
+          },
+        })
       }
 
       return cb(results.rows[0])
@@ -77,7 +94,12 @@ module.exports = {
 
     db.query(query, [id, limit, offset], (err, results) => {
       if (err || !results.rows) {
-        throw Error(err)
+        return res.render('_partials/not-found', {
+          info: {
+            msg: 'Error ao listar receitas do chef',
+            page_title: 'Error ou página não encontrada',
+          },
+        })
       }
 
       return cb(results.rows)
@@ -93,7 +115,12 @@ module.exports = {
 
     db.query(query, values, (err) => {
       if (err) {
-        throw Error(err)
+        return res.render('_partials/not-found', {
+          info: {
+            msg: 'Error ao atulizar chef',
+            page_title: 'Error ou página não encontrada',
+          },
+        })
       }
 
       return cb()
@@ -107,7 +134,12 @@ module.exports = {
 
     db.query(query, values, (err) => {
       if (err) {
-        throw Error(err)
+        return res.render('_partials/not-found', {
+          info: {
+            msg: 'Error ao excluir chef',
+            page_title: 'Error ou página não encontrada',
+          },
+        })
       }
       return cb()
     })

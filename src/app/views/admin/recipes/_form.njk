@@ -1,6 +1,6 @@
   <div class="form-inputs">
     <label for="chef">Chef</label>
-    <select name="chef">
+    <select name="chef" required>
       <option value="" selected disabled>Selecione um chef</option>
 
       {% for chef in chefs %}
@@ -20,6 +20,7 @@
       name="title"
       id="title"
       value="{{ recipe.title }}"
+      required
     >
 
     <label for="recipe_image">Imagem da receita</label>
@@ -28,6 +29,7 @@
       id="recipe_image"
       name="image_url"
       value="{{ recipe.image_url }}"
+      required
     />
 
     <label for="ingredients">Ingredientes</label>
@@ -41,6 +43,7 @@
                 id="ingredients"
                 name="ingredients[]"
                 value="{{ingredient  }}"
+                required
               />
               <button type="button" data-btn="remove">X</button>
             </div>
@@ -48,7 +51,7 @@
 
         {% else %}
           <div class="ingre-group" data-child>
-            <input type="text" id="ingredients" name="ingredients[]" />
+            <input type="text" id="ingredients" name="ingredients[]" required />
             <button type="button" data-btn="remove">X</button>
           </div>
         {% endif %}
@@ -67,13 +70,14 @@
                 id="preparation"
                 name="preparation[]"
                 value="{{ preparation }}"
+                required
               />
               <button type="button" data-btn="remove">X</button>
             </div>
           {% endfor %}
           {% else %}
             <div class="prep-group" data-child>
-              <input type="text" id="preparation" name="preparation[]"/>
+              <input type="text" id="preparation" name="preparation[]" required />
               <button type="button" data-btn="remove">X</button>
             </div>
         {% endif %}
@@ -87,5 +91,6 @@
       cols="30"
       rows="10"
       name="information"
+      required
       >{{ recipe.information }}</textarea>
   </div>

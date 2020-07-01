@@ -118,7 +118,12 @@ module.exports = {
         return destroy(id, res, () => res.redirect(`/admin/chefs`))
       }
 
-      return res.send('Chefs que possuem receitas não podem ser deletados')
+      return res.render('_partials/not-found', {
+        info: {
+          msg: 'Chefs que possuem receitas não podem ser deletados',
+          page_title: 'Foodfy | Error',
+        },
+      })
     })
   },
 }

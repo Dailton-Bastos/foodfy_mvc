@@ -17,7 +17,12 @@ module.exports = {
     `
     db.query(query, [limit, offset], (err, results) => {
       if (err || !results.rows) {
-        throw Error(err)
+        return res.render('_partials/not-found', {
+          info: {
+            msg: 'Error ao listar receitas',
+            page_title: 'Error ou página não encontrada',
+          },
+        })
       }
 
       return cb(results.rows)
@@ -59,7 +64,12 @@ module.exports = {
 
     db.query(query, values, (err, results) => {
       if (err || !results.rows[0]) {
-        throw Error(err)
+        return res.render('_partials/not-found', {
+          info: {
+            msg: 'Error ao salvar receita',
+            page_title: 'Error ou página não encontrada',
+          },
+        })
       }
       return cb(results.rows[0])
     })
@@ -70,7 +80,12 @@ module.exports = {
 
     db.query(query, (err, results) => {
       if (err || !results.rows) {
-        throw Error(err)
+        return res.render('_partials/not-found', {
+          info: {
+            msg: 'Error na listagem de chefs',
+            page_title: 'Error ou página não encontrada',
+          },
+        })
       }
       return cb(results.rows)
     })
@@ -87,7 +102,12 @@ module.exports = {
 
     db.query(query, [id], (err, results) => {
       if (err || !results.rows[0]) {
-        throw Error(err)
+        return res.render('_partials/not-found', {
+          info: {
+            msg: 'Error ou receita não encontrada',
+            page_title: 'Error ou página não encontrada',
+          },
+        })
       }
 
       return cb(results.rows[0])
@@ -127,7 +147,12 @@ module.exports = {
 
     db.query(query, values, (err, results) => {
       if (err || !results.rows) {
-        throw Error(err)
+        return res.render('_partials/not-found', {
+          info: {
+            msg: 'Error ao atualizar receita',
+            page_title: 'Error ou página não encontrada',
+          },
+        })
       }
 
       return cb()
@@ -139,7 +164,12 @@ module.exports = {
 
     db.query(query, [id], (err) => {
       if (err) {
-        throw Error(err)
+        return res.render('_partials/not-found', {
+          info: {
+            msg: 'Error ao excluir receita',
+            page_title: 'Error ou página não encontrada',
+          },
+        })
       }
       return cb()
     })
@@ -156,7 +186,14 @@ module.exports = {
     `
 
     db.query(query, (err, results) => {
-      if (err || !results.rows) throw Error(err)
+      if (err || !results.rows) {
+        return res.render('_partials/not-found', {
+          info: {
+            msg: 'Error ao listar receitas',
+            page_title: 'Error ou página não encontrada',
+          },
+        })
+      }
 
       return cb(results.rows)
     })
@@ -191,7 +228,12 @@ module.exports = {
 
     db.query(query, [limit, offset], (err, results) => {
       if (err || !results.rows) {
-        throw Error(err)
+        return res.render('_partials/not-found', {
+          info: {
+            msg: 'Error ao buscar receita',
+            page_title: 'Error ou página não encontrada',
+          },
+        })
       }
 
       return cb(results.rows)
