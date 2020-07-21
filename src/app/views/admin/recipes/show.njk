@@ -21,8 +21,29 @@
     </div>
 
     <article class="show-recipe">
-      <div class="recipe-full-image">
-        <img src="{{ recipe.image_url }}" alt="{{ recipe.title }}" />
+      <div class="gallery">
+        <div class="recipe-full-image" data-gallery="full-img">
+          {% if not files[0] %}
+            <img src="http://placehold.it/900x300?text=RECEITA SEM FOTOS" >
+          {% else %}
+            <img src="{{ files[0].src }}" alt="{{ files[0].name }}" />
+          {% endif %}
+        </div>
+
+        {% if files.length > 1 %}
+          <div class="gallery-preview" data-gallery-preview>
+            {% for image in files %}
+              <img
+                src="{{ image.src }}"
+                alt="{{ image.name }}"
+                {% if loop.index0 === 0 %}
+                  class="active"
+                {% endif %}
+                onclick="ImageGallery.setImage(event)"
+              >
+            {% endfor %}
+          </div>
+        {% endif %}
       </div>
 
       <div class="recipe-title">
@@ -31,8 +52,8 @@
       </div>
 
       <div class="recipe-ingredients">
-        <h2 data-btn="accordion">Ingredientes</h2>
-        <ul>
+        <h2 class="active" onclick="Accordion.title(event)">Ingredientes</h2>
+        <ul class="active">
           {% for ingredient in recipe.ingredients %}
             <li>{{ingredient}}</li>
           {% endfor %}
@@ -40,7 +61,7 @@
       </div>
 
       <div class="recipe-preparation">
-        <h2 data-btn="accordion">Modo de preparo</h2>
+        <h2 onclick="Accordion.title(event)">Modo de preparo</h2>
         <ul>
           {% for preparation in recipe.preparation %}
             <li>{{preparation}}</li>
@@ -49,7 +70,7 @@
       </div>
 
       <div class="recipe-information">
-        <h2 data-btn="accordion">Informações adicionais</h2>
+        <h2 onclick="Accordion.title(event)">Informações adicionais</h2>
         <div class="info">
           <p>{{ recipe.information }}</p>
         </div>

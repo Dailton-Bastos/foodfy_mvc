@@ -1,4 +1,33 @@
   <div class="form-inputs">
+
+    <label>Imagem da receita</label>
+    <p>Selecione até 5 fotos</p>
+    <div class="photos-container">
+      <div class="photos-upload">
+        <input
+          id="photos-input"
+          type="file"
+          name="files"
+          accept="image/*"
+          onchange="PhotosUpload.handleFileInput(event)"
+        >
+        <span class="material-icons">add</span>
+      </div>
+      <div class="photos-preview" data-preview="image">
+        {% if files %}
+          {% for image in files %}
+            <div class="photo" id="{{ image.id }}">
+              <img src="{{ image.src }}" alt="{{ image.name }}">
+              <i class="material-icons"
+                onclick="PhotosUpload.removeOldPhoto(event)"
+              >close</i>
+            </div>
+          {% endfor %}
+          <input type="hidden" name="removed_files" data-remove="file">
+        {% endif %}
+      </div>
+    </div>
+
     <label for="chef">Chef</label>
     <select name="chef" required>
       <option value="" selected disabled>Selecione um chef</option>
@@ -19,71 +48,51 @@
     <input
       name="title"
       id="title"
-      value="{{ recipe.title }}"
+      {% if recipe.title %}
+        value="{{ recipe.title }}"
+      {% endif %}
       required
     >
 
-    <label for="recipe_image">Imagem da receita</label>
-    <input
-      type="url"
-      id="recipe_image"
-      name="image_url"
-      value="{{ recipe.image_url }}"
-      required
-    />
-
-    <label for="ingredients">Ingredientes</label>
+    <label>Ingredientes</label>
       <div class="ingredients">
-
         {% if recipe.ingredients %}
+
           {% for ingredient in recipe.ingredients %}
             <div class="ingre-group" data-child>
-              <input
-                type="text"
-                id="ingredients"
-                name="ingredients[]"
-                value="{{ingredient  }}"
-                required
-              />
-              <button type="button" data-btn="remove">X</button>
+              <input name="ingredients[]" value="{{ ingredient }}"required />
+              <button onclick="AddNewInput.removeInput(event)">X</button>
             </div>
           {% endfor %}
 
         {% else %}
           <div class="ingre-group" data-child>
-            <input type="text" id="ingredients" name="ingredients[]" required />
-            <button type="button" data-btn="remove">X</button>
+            <input name="ingredients[]" required />
+            <button onclick="AddNewInput.removeInput(event)">X</button>
           </div>
         {% endif %}
-
       </div>
-      <a href="#" data-btn="ingred">Adicionar novo ingrediente</a>
+    <a href="#" onclick="AddNewInput.addInput(event)">Adicionar novo ingrediente</a>
 
-    <label for="preparation">Modo de preparo</label>
+    <label>Modo de preparo</label>
       <div class="preparation">
-
         {% if recipe.preparation %}
+
           {% for preparation in recipe.preparation %}
             <div class="prep-group" data-child>
-              <input
-                type="text"
-                id="preparation"
-                name="preparation[]"
-                value="{{ preparation }}"
-                required
-              />
-              <button type="button" data-btn="remove">X</button>
+              <input name="preparation[]" value="{{ preparation }}" required />
+              <button onclick="AddNewInput.removeInput(event)">X</button>
             </div>
           {% endfor %}
+
           {% else %}
             <div class="prep-group" data-child>
-              <input type="text" id="preparation" name="preparation[]" required />
-              <button type="button" data-btn="remove">X</button>
+              <input name="preparation[]" required />
+              <button onclick="AddNewInput.removeInput(event)">X</button>
             </div>
         {% endif %}
-
       </div>
-      <a href="#" data-btn="prep">Adicionar novo passo</a>
+    <a href="#" onclick="AddNewInput.addInput(event)">Adicionar novo passo</a>
 
     <label for="information">Informações adicionais</label>
     <textarea
@@ -91,6 +100,5 @@
       cols="30"
       rows="10"
       name="information"
-      required
       >{{ recipe.information }}</textarea>
   </div>

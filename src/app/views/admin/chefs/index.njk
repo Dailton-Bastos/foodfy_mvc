@@ -16,7 +16,11 @@
         {% for chef in chefs %}
           <li class="chef">
             <div class="chef-avatar">
-              <img src="{{ chef.avatar_url }}" alt="{{ chef.name }}">
+              {% if not chef.avatar %}
+                <img src="http://placehold.it/64x64?text=AVATAR" />
+              {% else %}
+                <img src="{{ chef.avatar }}" alt="{{ chef.name }}" />
+              {% endif %}
             </div>
             <div class="chef-info">
               <p>{{ chef.name }}</p>

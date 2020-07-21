@@ -9,7 +9,11 @@
         <li>
           <a href="/app/recipes/{{ recipe.id }}">
             <div class="recipe-item">
-              <img src="{{ recipe.image_url }}" alt="{{ recipe.title }}">
+              {% if not recipe.image %}
+                <img src="http://placehold.it/260x80?text=RECEITA SEM FOTO" >
+              {% else %}
+                <img src="{{ recipe.image }}" alt="{{ recipe.title }}">
+              {% endif %}
               <div class="recipe-info">
                 <p>{{ recipe.title }}</p>
                 <span>por {{ recipe.chef }}</span>
@@ -19,6 +23,8 @@
         </li>
       {% endfor %}
     </ul>
-    {% include "../../_partials/pagination.njk" %}
+    {% if pagination.total > 1 %}
+      {% include "_partials/pagination.njk" %}
+    {% endif %}
   </div>
 {% endblock %}

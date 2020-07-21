@@ -1,14 +1,12 @@
-const { date } = require('../../libs/utils')
-
 const db = require('../../config/database')
 
 module.exports = {
-  all(res, params, cb) {
+  all(params) {
     const { limit, offset } = params
 
     const query = `
       SELECT chefs.*, COUNT(recipes) AS total_recipes,
-      (SELECT DISTINCT count(*) FROM chefs) AS total
+      (SELECT DISTINCT COUNT(*) FROM chefs) AS total
       FROM chefs
       LEFT JOIN recipes
       ON chefs.id = recipes.chef_id
@@ -17,69 +15,49 @@ module.exports = {
       LIMIT $1 OFFSET $2
     `
 
-    db.query(query, [limit, offset], (err, results) => {
-      if (err || !results.rows) {
-        return res.render('_partials/not-found', {
-          info: {
-            msg: 'Error ao listar chefs',
-            page_title: 'Error ou página não encontrada',
-          },
-        })
-      }
-      return cb(results.rows)
-    })
+    return db.query(query, [limit, offset])
   },
 
-  create(data, res, cb) {
+  create(data) {
     const query = `
-    INSERT INTO chefs (name, avatar_url, created_at)
-    VALUES ($1,$2,$3) RETURNING id
+      INSERT INTO chefs (
+        name,
+        file_id
+      ) VALUES ($1,$2)
+    RETURNING id`
+
+    const { name, file_id } = data
+
+    const values = [name, file_id]
+
+    return db.query(query, values)
+  },
+
+  find(id) {
+    const query = `
+      SELECT chefs.*,
+      COUNT(recipes) As total_recipes
+      FROM chefs
+      LEFT JOIN recipes
+      ON (chefs.id = recipes.chef_id)
+      WHERE chefs.id = $1
+      GROUP BY chefs.id
+      ORDER BY total_recipes DESC`
+
+    return db.query(query, [id])
+  },
+
+  avatar(id) {
+    const query = `
+      SELECT files.id, files.name, files.path
+      FROM files
+      WHERE id = $1
     `
-    const { name, avatar_url } = data
 
-    const values = [name, avatar_url, date(Date.now()).iso]
-
-    db.query(query, values, (err, results) => {
-      if (err || !results.rows[0]) {
-        return res.render('_partials/not-found', {
-          info: {
-            msg: 'Error ao salvar chef',
-            page_title: 'Error ou página não encontrada',
-          },
-        })
-      }
-      return cb(results.rows[0])
-    })
+    return db.query(query, [id])
   },
 
-  find(id, res, cb) {
-    const query = `
-    SELECT chefs.*,
-    COUNT(recipes) As total_recipes
-    FROM chefs
-    LEFT JOIN recipes
-    ON (chefs.id = recipes.chef_id)
-    WHERE chefs.id = $1
-    GROUP BY chefs.id
-    ORDER BY total_recipes DESC`
-
-    const values = [id]
-
-    db.query(query, values, (err, results) => {
-      if (err || !results.rows[0]) {
-        return res.render('_partials/not-found', {
-          info: {
-            msg: 'Error ou chef não existe',
-            page_title: 'Error ou página não encontrada',
-          },
-        })
-      }
-
-      return cb(results.rows[0])
-    })
-  },
-
-  recipesChef(id, res, params, cb) {
+  recipes(id, params) {
     const { limit, offset } = params
 
     const query = `
@@ -92,56 +70,33 @@ module.exports = {
       LIMIT $2 OFFSET $3
       `
 
-    db.query(query, [id, limit, offset], (err, results) => {
-      if (err || !results.rows) {
-        return res.render('_partials/not-found', {
-          info: {
-            msg: 'Error ao listar receitas do chef',
-            page_title: 'Error ou página não encontrada',
-          },
-        })
-      }
-
-      return cb(results.rows)
-    })
+    return db.query(query, [id, limit, offset])
   },
 
-  update(data, res, cb) {
-    const query = `UPDATE chefs SET name=($1), avatar_url=($2) WHERE id=$3`
+  async update(data) {
+    const { name, id, file_id, removed_files } = data
 
-    const { name, avatar_url, id } = data
+    let values = [name, id]
 
-    const values = [name, avatar_url, id]
+    let query = 'UPDATE chefs SET name=($1) WHERE id=($2)'
+    const queryFile = 'UPDATE chefs SET name=($1), file_id=($2) WHERE id=($3)'
 
-    db.query(query, values, (err) => {
-      if (err) {
-        return res.render('_partials/not-found', {
-          info: {
-            msg: 'Error ao atulizar chef',
-            page_title: 'Error ou página não encontrada',
-          },
-        })
-      }
+    if (removed_files) {
+      query = queryFile
+      values = [name, null, id]
+    }
 
-      return cb()
-    })
+    if (file_id) {
+      query = queryFile
+      values = [name, file_id, id]
+    }
+
+    return db.query(query, values)
   },
 
-  destroy(id, res, cb) {
+  delete(id) {
     const query = `DELETE FROM chefs WHERE id = $1`
 
-    const values = [id]
-
-    db.query(query, values, (err) => {
-      if (err) {
-        return res.render('_partials/not-found', {
-          info: {
-            msg: 'Error ao excluir chef',
-            page_title: 'Error ou página não encontrada',
-          },
-        })
-      }
-      return cb()
-    })
+    return db.query(query, [id])
   },
 }

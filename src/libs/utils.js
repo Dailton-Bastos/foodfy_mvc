@@ -8,7 +8,7 @@ module.exports = {
     return { day, month, year, iso: `${year}-${month}-${day}` }
   },
 
-  paginate(page, limit) {
+  pageLimit(page, limit) {
     page = page || 1
     const offset = limit * (page - 1)
 
@@ -17,5 +17,19 @@ module.exports = {
       limit,
       offset,
     }
+  },
+
+  paginate(results, params) {
+    const { page, limit } = params
+
+    return {
+      total: results[0] ? Math.ceil(results[0].total / limit) : 0,
+      page,
+    }
+  },
+
+  getImageURL(image, params) {
+    const { protocol, headers } = params
+    return `${protocol}://${headers.host}${image.path.replace('public', '')}`
   },
 }

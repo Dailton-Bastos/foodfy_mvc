@@ -5,11 +5,15 @@
 
   <div class="container">
     <ul class="list-chefs">
-      {% for chef in listChef %}
+      {% for chef in allChefs %}
         <li class="chef">
           <div class="chef-avatar">
             <a href="/app/chefs/{{ chef.id }}">
-              <img src="{{ chef.avatar_url }}" alt="{{ chef.name }}">
+              {% if not chef.avatar %}
+                <img src="http://placehold.it/64x64?text=AVATAR" />
+              {% else %}
+                <img src="{{ chef.avatar }}" alt="{{ chef.name }}" />
+              {% endif %}
             </a>
           </div>
           <div class="chef-info">
@@ -24,6 +28,8 @@
       {% endfor %}
     </ul>
 
-    {% include "../../_partials/pagination.njk" %}
+    {% if pagination.total > 1 %}
+      {% include "_partials/pagination.njk" %}
+    {% endif %}
   </div>
 {% endblock %}

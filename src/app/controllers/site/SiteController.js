@@ -1,14 +1,10 @@
-const { mostAccessed, all, find, search } = require('../../models/Recipe')
-const {
-  all: allChefs,
-  find: findChef,
-  recipesChef,
-} = require('../../models/Chef')
+const Recipes = require('../../models/Recipe')
+const Chefs = require('../../models/Chef')
 
-const { paginate } = require('../../../libs/utils')
+const { pageLimit, paginate, getImageURL } = require('../../../libs/utils')
 
 module.exports = {
-  index(req, res) {
+  async index(req, res) {
     const info = {
       page_title: 'Foodfy | Home',
     }
@@ -19,66 +15,201 @@ module.exports = {
         'Aprenda a construir os melhores pratos com receitas criadas por profissionais do mundo inteiro',
     }
 
-    mostAccessed(res, (recipes) => {
-      return res.render('site/index', { about, info, recipes })
-    })
+    async function getImage(recipeId) {
+      const results = await Recipes.files(recipeId)
+
+      const files = results.rows.map((file) => {
+        return getImageURL(file, req)
+      })
+
+      return files[0]
+    }
+
+    try {
+      const results = await Recipes.mostAccessed()
+      const recipes = results.rows
+
+      const recipesPromise = recipes.map(async (recipe) => {
+        recipe.image = await getImage(recipe.id)
+        return recipe
+      })
+
+      const recipesMostAccessed = await Promise.all(recipesPromise)
+
+      return res.render('site/index', {
+        about,
+        info,
+        recipes: recipesMostAccessed,
+      })
+    } catch (error) {
+      throw new Error(error)
+    }
   },
 
-  recipes(req, res) {
+  async recipes(req, res) {
     const info = {
       page_title: 'Foodfy | Recipes',
     }
 
     const { page } = req.query
 
-    const params = paginate(page, 6)
+    const params = pageLimit(page, 6)
 
-    all(res, params, (allRecipes) => {
-      const total = allRecipes[0]
-        ? Math.ceil(allRecipes[0].total / params.limit)
-        : 0
+    async function getImage(recipeId) {
+      const results = await Recipes.files(recipeId)
 
-      const pagination = {
-        total,
-        page: params.page,
-      }
+      const files = results.rows.map((file) => {
+        return getImageURL(file, req)
+      })
+
+      return files[0]
+    }
+
+    try {
+      const results = await Recipes.all(params)
+
+      const recipes = results.rows
+
+      const pagination = paginate(recipes, params)
+
+      const recipesPromise = recipes.map(async (recipe) => {
+        recipe.image = await getImage(recipe.id)
+        return recipe
+      })
+
+      const allRecipes = await Promise.all(recipesPromise)
+
       return res.render('site/recipes/index', { info, allRecipes, pagination })
-    })
+    } catch (error) {
+      throw new Error(error)
+    }
   },
 
-  showRecipe(req, res) {
+  async showRecipe(req, res) {
     const { id } = req.params
 
-    find(id, res, (recipe) => {
+    try {
+      let results = await Recipes.find(id)
+
+      const recipe = results.rows[0]
+
+      if (!recipe) return res.send('Recipe not found')
+
       const info = {
         page_title: `${recipe.title}`,
       }
 
-      return res.render('site/recipes/show', { info, recipe })
-    })
+      results = await Recipes.files(id)
+      const files = results.rows.map((file) => ({
+        ...file,
+        src: getImageURL(file, req),
+      }))
+
+      return res.render('site/recipes/show', { info, recipe, files })
+    } catch (error) {
+      throw new Error(error)
+    }
   },
 
-  searchRecipe(req, res) {
-    const { page, filter } = req.query
+  async chefs(req, res) {
+    async function getAvatar(avatarId) {
+      const results = await Chefs.avatar(avatarId)
 
-    const params = paginate(page, 3)
+      const files = results.rows.map((file) => {
+        return getImageURL(file, req)
+      })
 
-    params.filter = filter
-
+      return files[0]
+    }
     const info = {
-      page_title: `Buscando por ${filter}`,
+      page_title: 'Foodfy | Chefs',
     }
 
-    search(res, params, (recipes) => {
-      const total = recipes[0] ? Math.ceil(recipes[0].total / params.limit) : 0
+    const { page } = req.query
 
-      const pagination = {
-        total,
-        page: params.page,
-        filter: params.filter,
+    const params = pageLimit(page, 8)
+
+    try {
+      const results = await Chefs.all(params)
+
+      const chefs = results.rows
+
+      const pagination = paginate(chefs, params)
+
+      const chefsPromise = chefs.map(async (chef) => {
+        const { file_id } = chef
+        chef.avatar = await getAvatar(file_id)
+
+        return chef
+      })
+
+      const allChefs = await Promise.all(chefsPromise)
+
+      return res.render('site/chefs/index', { info, allChefs, pagination })
+    } catch (error) {
+      throw new Error(error)
+    }
+  },
+
+  async showChef(req, res) {
+    const { id } = req.params
+    const { page } = req.query
+
+    async function getRecipeImage(recipeId) {
+      const results = await Recipes.files(recipeId)
+
+      const files = results.rows.map((file) => {
+        return getImageURL(file, req)
+      })
+
+      return files[0]
+    }
+
+    try {
+      let results = await Chefs.find(id)
+      const chef = results.rows[0]
+
+      if (!chef) return res.send('Chef not found')
+
+      const info = {
+        page_title: `Chef | ${chef.name}`,
       }
-      return res.render('site/search', { info, recipes, pagination, filter })
-    })
+
+      const { file_id } = chef
+
+      results = await Chefs.avatar(file_id)
+
+      const file = results.rows[0]
+
+      let avatar = {}
+
+      if (file) avatar = { ...file, src: getImageURL(file, req) }
+
+      const params = pageLimit(page, 4)
+
+      results = await Chefs.recipes(id, params)
+
+      const recipes = results.rows
+
+      const pagination = paginate(recipes, params)
+
+      const recipesPromise = recipes.map(async (recipe) => {
+        recipe.img = await getRecipeImage(recipe.id)
+        return recipe
+      })
+
+      const recipesIndex = await Promise.all(recipesPromise)
+
+      return res.render('site/chefs/show', {
+        info,
+        chef,
+        avatar,
+        recipes: recipesIndex,
+        pagination,
+      })
+    } catch (error) {
+      throw new Error(error)
+    }
   },
 
   about(req, res) {
@@ -99,58 +230,5 @@ module.exports = {
     }
 
     return res.render('site/about', { info, about, start, recipes })
-  },
-
-  chefs(req, res) {
-    const info = {
-      page_title: 'Foodfy | Chefs',
-    }
-
-    const { page } = req.query
-
-    const params = paginate(page, 8)
-
-    allChefs(res, params, (listChef) => {
-      const total = listChef[0]
-        ? Math.ceil(listChef[0].total / params.limit)
-        : 0
-
-      const pagination = {
-        total,
-        page: params.page,
-      }
-      return res.render('site/chefs/index', { info, listChef, pagination })
-    })
-  },
-
-  showChef(req, res) {
-    const { id } = req.params
-    const { page } = req.query
-
-    const params = paginate(page, 4)
-
-    findChef(id, res, (chef) => {
-      recipesChef(id, res, params, (recipes) => {
-        const info = {
-          page_title: `Chef | ${chef.name}`,
-        }
-
-        const total = recipes[0]
-          ? Math.ceil(recipes[0].total / params.limit)
-          : 0
-
-        const pagination = {
-          total,
-          page: params.page,
-        }
-
-        return res.render('site/chefs/show', {
-          info,
-          chef,
-          recipes,
-          pagination,
-        })
-      })
-    })
   },
 }

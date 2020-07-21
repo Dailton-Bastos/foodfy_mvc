@@ -5,11 +5,12 @@
 
   <section class="container">
     <form
-      action="/admin/chefs/{{ id }}?_method=PUT"
+      action="/admin/chefs/{{ chef.id }}?_method=PUT"
       method="POST"
       class="content-form"
+      enctype="multipart/form-data"
     >
-    <input type="hidden" name="id" value="{{ id }}">
+    <input type="hidden" name="id" value="{{ chef.id }}">
     {# Inputs #}
     {% include "./_form.njk" %}
       <div class="content-header">

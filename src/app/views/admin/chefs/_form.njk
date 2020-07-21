@@ -5,17 +5,37 @@
       type="text"
       id="name"
       name="name"
-      value="{{ chef.name}}"
+      {% if chef.name %}
+        value="{{ chef.name }}"
+      {% endif %}
       required
     />
 
-    <label for="avatar">Avatar</label>
-    <input
-      type="url"
-      id="avatar"
-      name="avatar_url"
-      value="{{ chef.avatar_url}}"
-      required
-    />
+    <label>Avatar</label>
+    <div class="photos-container">
+      <div class="photos-upload-avatar">
+        <input
+          type="file"
+          name="file"
+          accept="image/*"
+          onchange="PhotosUpload.handleFileAvatar(event)"
+          title="Envie uma foto"
+        >
+        <p>Enviar Avatar</p>
+      </div>
+      <div class="photos-preview avatar" data-preview="image">
+        {% if avatar.src %}
+
+          <div class="photo" id="{{ avatar.id }}" data-image="avatar">
+            <img src="{{ avatar.src }}" alt="{{ avatar.name }}">
+            <i
+              class="material-icons"
+              onclick="PhotosUpload.removeOldPhoto(event)"
+              >close</i>
+          </div>
+          <input type="hidden" name="removed_files" data-remove="file">
+        {% endif %}
+      </div>
+    </div>
 
   </div>

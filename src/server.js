@@ -24,13 +24,5 @@ nunjucks.configure(resolve(__dirname, 'app', 'views'), {
 
 // Config Routes
 server.use(routes)
-server.use((_, res) => {
-  return res.status(404).render('_partials/not-found', {
-    info: {
-      msg: 'Página não encontrada, ou algo deu errado',
-      page_title: 'Página não encontrada',
-    },
-  })
-})
 
 server.listen(PORT)

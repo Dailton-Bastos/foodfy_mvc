@@ -1,0 +1,162 @@
+/* Chefs */
+.list-chefs {
+  margin-top: 5rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.chef {
+  display: flex;
+  align-items: center;
+  margin: 0 1rem 3rem 0;
+  width: 100%;
+  max-width: 22rem;
+}
+
+.chef-info {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-left: 2rem;
+}
+
+.chef-info p {
+  font-size: 1.8rem;
+  color: var(--dark);
+  margin-bottom: 5px;
+}
+
+.chef-info span {
+  font-size: 1.4rem;
+  color: #666;
+}
+
+.chef-info a {
+  font-size: 1.4rem;
+  color: var(--purple);
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.chef-avatar img {
+  max-width: 64px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  box-shadow: 3px 1px 6px -4px #000;
+  object-fit: cover;
+}
+
+@media (max-width: 650px) {
+  .list-chefs {
+    flex-direction: column;
+  }
+
+  .chef {
+    flex-direction: column;
+    box-shadow: 3px 1px 6px -4px #000;
+    max-width: 100%;
+    margin: 2rem 0;
+    padding: 2rem;
+  }
+
+  .chef-avatar {
+    width: 100%;
+    text-align: center;
+    margin: 1rem 0;
+  }
+
+  .chef-avatar img {
+    display: inline-block;
+    min-width: 100px;
+    height: 100px;
+  }
+
+  .chef-info {
+    padding: 0;
+    align-items: center;
+  }
+
+  .chef-info p,
+  .chef-info span,
+  .chef-info a {
+    font-size: 2rem;
+  }
+}
+
+/* Show Chef Profile */
+.chef-bio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5rem;
+  margin-top: 5rem;
+}
+
+.chef-bio .avatar img {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  box-shadow: 0px 2px 6px -2px rgba(0, 0, 0, 0.6);
+  margin-bottom: 3rem;
+  object-fit: cover;
+}
+
+.chef-bio h1 {
+  font-size: 3.6rem;
+  color: var(--dark);
+  padding: 0.8rem;
+}
+
+.chef-bio span {
+  font-size: 2rem;
+  color: #777;
+}
+
+@media (max-width: 720px) {
+  .chef-bio .avatar img {
+    width: 150px;
+    height: 150px;
+  }
+
+  .chef-bio h1 {
+    font-size: 3rem;
+  }
+}
+
+/* Avatar Input File */
+
+.form-inputs .photos-upload-avatar {
+  width: 140px;
+  height: 37px;
+  border-radius: 4px;
+  background-color: var(--purple);
+  position: relative;
+  overflow: hidden;
+  display: block;
+  margin-right: 1rem;
+}
+
+.form-inputs .photos-upload-avatar p {
+  padding: 0.9rem 1.9rem;
+  font-size: 1.6rem;
+  color: var(--white);
+  font-family: Helvetica, sans-serif;
+  font-weight: bold;
+  text-align: center;
+}
+
+.form-inputs .photos-upload-avatar input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  overflow: hidden;
+  cursor: pointer;
+}

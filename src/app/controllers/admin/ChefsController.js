@@ -1,16 +1,21 @@
-const {
-  all,
-  create,
-  find,
-  update,
-  destroy,
-  recipesChef,
-} = require('../../models/Chef')
+const Chefs = require('../../models/Chef')
+const Recipe = require('../../models/Recipe')
+const File = require('../../models/File')
 
-const { paginate } = require('../../../libs/utils')
+const { pageLimit, paginate, getImageURL } = require('../../../libs/utils')
 
 module.exports = {
-  index(req, res) {
+  async index(req, res) {
+    async function getAvatar(avatarId) {
+      const results = await Chefs.avatar(avatarId)
+
+      const files = results.rows.map((file) => {
+        return getImageURL(file, req)
+      })
+
+      return files[0]
+    }
+
     const info = {
       page_title: 'Foodfy | Gerenciar chefs',
       content_title: 'Gerenciar chefs',
@@ -18,21 +23,35 @@ module.exports = {
 
     const { page } = req.query
 
-    const params = paginate(page, 8)
+    const params = pageLimit(page, 8)
 
-    all(res, params, (chefs) => {
-      const total = chefs[0] ? Math.ceil(chefs[0].total / params.limit) : 0
+    try {
+      const results = await Chefs.all(params)
 
-      const pagination = {
-        total,
-        page: params.page,
-      }
+      const chefs = results.rows
 
-      return res.render('admin/chefs/index', { info, chefs, pagination })
-    })
+      const pagination = paginate(chefs, params)
+
+      const chefsPromise = chefs.map(async (chef) => {
+        const { file_id } = chef
+        chef.avatar = await getAvatar(file_id)
+
+        return chef
+      })
+
+      const chefsIndex = await Promise.all(chefsPromise)
+
+      return res.render('admin/chefs/index', {
+        info,
+        chefs: chefsIndex,
+        pagination,
+      })
+    } catch (error) {
+      throw new Error(error)
+    }
   },
 
-  newChef(req, res) {
+  create(req, res) {
     const info = {
       page_title: 'Foodfy | Novo chef',
       content_title: 'Criando chef',
@@ -40,90 +59,183 @@ module.exports = {
     return res.render('admin/chefs/new', { info })
   },
 
-  post(req, res) {
+  async post(req, res) {
     const keys = Object.keys(req.body)
-    const isValid = keys.every((key) => req.body[key] !== '')
 
-    if (!isValid) res.send('Todos os campos são obrigatório')
-
-    create(req.body, res, (chef) => {
-      return res.redirect(`/admin/chefs/${chef.id}`)
+    keys.forEach((key) => {
+      const isValid = req.body[key] === '' && key !== 'file'
+      if (isValid) return res.send('Nome é obrigatório')
+      return isValid
     })
+
+    try {
+      const { name } = req.body
+
+      let { file } = req.body
+
+      if (req.file) {
+        const avatar = await File.create(req.file)
+
+        file = avatar.rows[0].id
+      }
+
+      const chef = await Chefs.create({
+        name,
+        file_id: file,
+      })
+
+      const { id } = chef.rows[0]
+
+      return res.redirect(`/admin/chefs/${id}`)
+    } catch (error) {
+      throw new Error(error)
+    }
   },
 
-  show(req, res) {
+  async show(req, res) {
     const { id } = req.params
     const { page } = req.query
 
-    const params = paginate(page, 4)
+    async function getRecipeImage(recipeId) {
+      const results = await Recipe.files(recipeId)
 
-    find(id, res, (chef) => {
-      recipesChef(id, res, params, (recipes) => {
-        const info = {
-          page_title: `Chef | ${chef.name}`,
-          content_title: `Chef: ${chef.name}`,
-        }
-
-        const total = recipes[0]
-          ? Math.ceil(recipes[0].total / params.limit)
-          : 0
-
-        const pagination = {
-          total,
-          page: params.page,
-        }
-
-        return res.render('admin/chefs/show', {
-          info,
-          chef,
-          recipes,
-          pagination,
-        })
+      const files = results.rows.map((file) => {
+        return getImageURL(file, req)
       })
-    })
+
+      return files[0]
+    }
+
+    try {
+      let results = await Chefs.find(id)
+      const chef = results.rows[0]
+
+      if (!chef) return res.send('Chef not found')
+
+      const info = {
+        page_title: `Chef | ${chef.name}`,
+        content_title: `Chef: ${chef.name}`,
+      }
+
+      const { file_id } = chef
+
+      results = await Chefs.avatar(file_id)
+
+      const file = results.rows[0]
+
+      let avatar = {}
+
+      if (file) avatar = { ...file, src: getImageURL(file, req) }
+
+      const params = pageLimit(page, 4)
+
+      results = await Chefs.recipes(id, params)
+
+      const recipes = results.rows
+
+      const pagination = paginate(recipes, params)
+
+      const recipesPromise = recipes.map(async (recipe) => {
+        recipe.img = await getRecipeImage(recipe.id)
+        return recipe
+      })
+
+      const recipesIndex = await Promise.all(recipesPromise)
+
+      return res.render('admin/chefs/show', {
+        info,
+        chef,
+        avatar,
+        recipes: recipesIndex,
+        pagination,
+      })
+    } catch (error) {
+      throw new Error(error)
+    }
   },
 
-  edit(req, res) {
+  async edit(req, res) {
     const { id } = req.params
 
-    find(id, res, (chef) => {
+    try {
+      let results = await Chefs.find(id)
+      const chef = results.rows[0]
+
+      if (!chef) return res.send('Chef not found')
+
       const info = {
         page_title: `Editando | ${chef.name}`,
         content_title: 'Editando chef',
       }
-      return res.render('admin/chefs/edit', { info, id, chef })
-    })
+
+      const { file_id } = chef
+
+      results = await Chefs.avatar(file_id)
+
+      const file = results.rows[0]
+
+      let avatar = {}
+
+      if (file) avatar = { ...file, src: getImageURL(file, req) }
+
+      return res.render('admin/chefs/edit', { info, chef, avatar })
+    } catch (error) {
+      throw new Error(error)
+    }
   },
 
-  put(req, res) {
-    const { id } = req.body
-
+  async put(req, res) {
     const keys = Object.keys(req.body)
-    const isValid = keys.every((key) => req.body[key] !== '')
 
-    if (!isValid) res.send('Todos os campos são obrigatório')
-
-    update(req.body, res, () => {
-      return res.redirect(`/admin/chefs/${id}`)
+    keys.forEach((key) => {
+      const isValid =
+        req.body[key] === '' && key !== 'file' && key !== 'removed_files'
+      if (isValid) return res.send('Nome é obrigatório')
+      return isValid
     })
-  },
 
-  deleteChef(req, res) {
-    const { id } = req.params
+    const { id, removed_files } = req.body
 
-    const params = paginate(1, 1)
+    try {
+      if (req.file) {
+        const avatar = await File.create(req.file)
 
-    recipesChef(id, res, params, (recipes) => {
-      if (!recipes[0]) {
-        return destroy(id, res, () => res.redirect(`/admin/chefs`))
+        req.body.file_id = avatar.rows[0].id
       }
 
-      return res.render('_partials/not-found', {
-        info: {
-          msg: 'Chefs que possuem receitas não podem ser deletados',
-          page_title: 'Foodfy | Error',
-        },
-      })
-    })
+      await Chefs.update(req.body)
+
+      if (removed_files) {
+        const avatar_id = removed_files.replace(',', '')
+
+        await File.delete(avatar_id)
+      }
+
+      return res.redirect(`/admin/chefs/${id}`)
+    } catch (error) {
+      throw new Error(error)
+    }
+  },
+
+  async delete(req, res) {
+    const { id } = req.params
+
+    const { page } = req.query
+
+    const params = pageLimit(page, 1)
+
+    let results = await Chefs.recipes(id, params)
+    const recipe = results.rows[0]
+
+    if (recipe) return res.send('Não é possível deletar chef')
+
+    results = await Chefs.find(id)
+    const { file_id } = results.rows[0]
+
+    await Chefs.delete(id)
+
+    if (file_id) await File.delete(file_id)
+
+    return res.redirect(`/admin/chefs`)
   },
 }

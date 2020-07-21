@@ -8,19 +8,21 @@
 
     <nav class="menu-nav" data-menu="links">
       <ul>
-        <li><a href="/app/about">Sobre</a></li>
         <li><a href="/app/recipes">Receitas</a></li>
         <li><a href="/app/chefs">Chefs</a></li>
+        <li><a href="/app/about">Sobre</a></li>
       </ul>
     </nav>
 
-    <form action="/app/search" method="get">
+    <form action="/search" method="get">
       <input
         type="text"
         name="filter"
         placeholder="Buscar uma receita"
         required
-        value={{ filter }}
+        {% if filter %}
+          value={{ filter }}
+        {% endif %}
       >
       <button type="submit">Buscar</button>
     </form>

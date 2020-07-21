@@ -1,0 +1,164 @@
+/* Site Header */
+.header-site {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 3rem 0;
+}
+
+.logo img {
+  min-width: 91px;
+  max-width: 100%;
+}
+
+.menu-nav ul {
+  display: flex;
+  margin-left: 12.2rem;
+}
+
+.menu-nav ul a {
+  display: inline-block;
+  margin-right: 3rem;
+  padding: 1rem 0;
+  font-size: 1.6rem;
+  color: var(--dark);
+  transition: all 0.3s ease;
+}
+
+.menu-nav ul a:hover {
+  font-weight: bold;
+}
+
+.header-site form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header-site form input {
+  width: 24.6rem;
+  height: 37px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  padding: 1rem 1.5rem;
+}
+
+.header-site form input::placeholder {
+  font-size: 1.4rem;
+  color: #999;
+}
+
+.header-site form button {
+  width: 9.1rem;
+  height: 37px;
+  background-color: var(--purple);
+  color: var(--white);
+  border: 0;
+  border-radius: 4px;
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-left: 0.8rem;
+}
+
+@media (max-width: 760px) {
+  .header-site {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .menu-nav ul {
+    margin: 0;
+    padding: 1rem 0;
+  }
+
+  .menu-nav ul a {
+    font-size: 2rem;
+  }
+}
+
+/* Site Banner */
+.banner {
+  background-color: #fbdfdb;
+  width: 100%;
+  border-radius: 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.banner-text {
+  margin-left: 6rem;
+}
+
+.banner-text h1 {
+  font-size: 3.2rem;
+  color: var(--dark);
+  margin-bottom: 10px;
+}
+
+.banner-text p {
+  font-size: 1.8rem;
+  line-height: 2.8rem;
+  opacity: 0.7;
+  padding-right: 20rem;
+}
+
+.banner img {
+  margin-right: 10rem;
+  margin-top: 6.6rem;
+}
+
+@media (max-width: 695px) {
+  .banner {
+    flex-direction: column;
+  }
+
+  .banner-text {
+    margin: 0;
+  }
+
+  .banner img {
+    margin: 1rem;
+  }
+
+  .banner-text h1 {
+    margin: 2rem 0 1rem;
+    text-align: center;
+  }
+
+  .banner-text p {
+    text-align: center;
+    padding: 1rem 1rem 0;
+    width: 360px;
+  }
+}
+
+@media (min-width: 500px) and (max-width: 695px) {
+  .banner {
+    margin: 0 auto;
+    width: 80%;
+  }
+}
+
+/* Site About */
+.about-foodfy h1 {
+  margin: 2rem 0;
+  font-size: 2.4rem;
+  color: var(--font-color);
+}
+
+.about-foodfy p,
+.about-start p,
+.our-recipes p {
+  font-size: 1.8rem;
+  color: #444;
+  line-height: 28px;
+  margin-bottom: 1rem;
+}
+
+.about-start h2,
+.our-recipes h2 {
+  font-size: 2rem;
+  color: var(--dark);
+  margin: 2rem 0;
+}

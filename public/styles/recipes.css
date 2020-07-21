@@ -1,0 +1,497 @@
+/* Site Recipes */
+.most_accessed h2 {
+  margin-top: 5rem;
+  font-size: 2.4rem;
+  color: var(--dark);
+}
+
+.recipes-site {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 2rem auto;
+}
+
+.recipe-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 286px;
+  /* height: 200px; */
+  margin: 1rem 1rem 2rem;
+  padding: 1rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-shadow: 3px 1px 6px -4px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease-in-out;
+}
+
+@media (min-width: 640px) {
+  .recipe-item:hover {
+    transform: scale(1.1);
+  }
+}
+
+.recipe-item img {
+  height: 140px;
+  width: 100%;
+  border-radius: 15px;
+  object-fit: cover;
+}
+
+.recipe-info p {
+  font-size: 1.8rem;
+  color: var(--dark);
+  line-height: 21px;
+  margin: 2rem 0 5px;
+}
+
+.recipe-info span {
+  display: inline-block;
+  font-size: 1.4rem;
+  color: #777;
+  line-height: 16px;
+  padding-bottom: 2rem;
+}
+
+@media (max-width: 950px) {
+  .recipes-site {
+    justify-content: center;
+  }
+  .recipe-item {
+    max-width: 300px;
+  }
+
+  .recipe-info p {
+    font-size: 2rem;
+  }
+  .recipe-info span {
+    font-size: 1.8rem;
+  }
+}
+
+/* Show Recipe */
+.show-recipe {
+  display: flex;
+  flex-direction: column;
+  max-width: 940px;
+  margin: 3rem auto 0;
+  padding: 0 1rem;
+}
+
+.container .show-recipe {
+  padding: 0;
+}
+
+/* Recipes Gallery */
+.gallery .recipe-full-image img {
+  width: 100%;
+  max-height: 280px;
+  height: 100%;
+  border-radius: 15px;
+  object-fit: cover;
+}
+
+.gallery .gallery-preview {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.gallery .gallery-preview img {
+  width: 100px;
+  height: 50px;
+  border-radius: 3px;
+  border: 1px solid #ddd;
+  margin-bottom: 1rem;
+  object-fit: cover;
+  opacity: 0.5;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.gallery .gallery-preview img:hover,
+.gallery .gallery-preview img.active {
+  opacity: 1;
+}
+
+.gallery .gallery-preview img + img {
+  margin-left: 1rem;
+}
+
+.recipe-title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 5rem 1rem 3rem;
+}
+
+.recipe-title h1 {
+  font-size: 3.6rem;
+  color: var(--dark);
+  padding: 5px;
+}
+
+.recipe-title p {
+  font-size: 2rem;
+  color: #777;
+}
+
+.recipe-title p a {
+  margin-left: 5px;
+  font-style: italic;
+  font-weight: bold;
+  color: var(--purple);
+}
+
+@keyframes show_down {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -30px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.show-recipe h2 {
+  display: inline-block;
+  font-size: 2.4rem;
+  color: var(--dark);
+  padding: 1rem 0;
+}
+
+.show-recipe h2::after {
+  content: 'mostrar';
+  font-size: 1.2rem;
+  color: #999;
+  font-weight: bold;
+  margin-left: 8px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.show-recipe h2.active::after {
+  content: 'esconder';
+}
+
+.recipe-ingredients ul,
+.recipe-preparation ul {
+  display: none;
+  flex-direction: column;
+  list-style: circle;
+  list-style-position: inside;
+  margin: 1.9rem 0 4rem;
+  font-size: 1.8rem;
+  color: #444;
+  line-height: 28px;
+  animation: show_down 0.5s ease-out;
+}
+
+.recipe-information .info {
+  animation: show_down 0.5s ease-out;
+  display: none;
+}
+
+.recipe-ingredients ul.active,
+.recipe-preparation ul.active {
+  display: flex;
+}
+
+.recipe-information .info.active {
+  display: block;
+}
+
+.recipe-information .info {
+  margin: 1.9rem 0 5rem;
+}
+
+.recipe-information .info p {
+  font-size: 1.8rem;
+  color: #444;
+  line-height: 28px;
+  padding-bottom: 1.5rem;
+}
+
+@media (max-width: 720px) {
+  .recipe-title h1 {
+    font-size: 2.6rem;
+  }
+}
+
+/* Admin Recipes */
+.recipes-list {
+  padding: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.admin-recipe {
+  margin-right: 2rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-grow: 1;
+  width: 320px;
+  border-bottom: 1px solid #6558c3;
+  padding: 1rem;
+}
+
+.container .recipes-list,
+.container .admin-recipe {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.admin-recipe .img {
+  padding-right: 2rem;
+}
+
+.admin-recipe .img img {
+  max-width: 170px;
+  border-radius: 8px;
+  height: 80px;
+  width: 100%;
+  object-fit: cover;
+  box-shadow: 0px 2px 6px -2px rgba(0, 0, 0, 0.3);
+}
+
+.details p {
+  font-size: 1.8rem;
+  color: var(--font-color);
+  padding-bottom: 5px;
+}
+
+.details span {
+  font-size: 1.4rem;
+  color: #777;
+}
+
+.details a {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: var(--purple);
+  padding: 1rem 0;
+  max-width: 63px;
+  text-transform: capitalize;
+}
+
+@media (max-width: 600px) {
+  .recipes-list,
+  .admin-recipe {
+    flex-direction: column;
+  }
+
+  .details p {
+    font-size: 2rem;
+  }
+
+  .details span,
+  .details a {
+    font-size: 1.8rem;
+  }
+
+  .recipes-list {
+    padding: 1rem;
+  }
+
+  .admin-recipe {
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+
+  .admin-recipe .img {
+    padding: 0;
+  }
+
+  .admin-recipe .img img {
+    max-width: 100%;
+    height: 140px;
+    border-radius: 15px;
+    object-fit: cover;
+  }
+
+  .details {
+    margin-top: 1rem;
+  }
+  .gallery .recipe-full-image img {
+    height: 160px;
+  }
+}
+
+/* Input Content Form Recipe */
+.content-form,
+.form-inputs {
+  display: flex;
+  flex-direction: column;
+  order: 2;
+}
+
+.form-inputs {
+  margin: 1rem 0;
+}
+
+.form-inputs label {
+  font-size: 1.6rem;
+  color: var(--dark);
+  font-weight: bold;
+  margin: 1rem 0;
+}
+
+.form-inputs input,
+select {
+  height: 40px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 1rem;
+  font-size: 1.6rem;
+  margin-bottom: 3rem;
+}
+
+.form-inputs textarea {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  resize: vertical;
+  padding: 1rem;
+  font-size: 16px;
+}
+
+.form-inputs select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  color: #999;
+  font-size: 1.6rem;
+}
+
+.ingredients .ingre-group,
+.preparation .prep-group {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.ingredients .ingre-group button,
+.preparation .prep-group button {
+  display: none;
+  text-align: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 1.4rem;
+  color: var(--white);
+  background-color: var(--danger);
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  border: none;
+}
+
+.ingre-group + .ingre-group button,
+.prep-group + .prep-group button {
+  display: block;
+}
+
+.form-inputs a {
+  font-size: 1.6rem;
+  color: var(--purple);
+  font-weight: bold;
+  max-width: 194px;
+  display: block;
+  margin-bottom: 3rem;
+  cursor: pointer;
+}
+
+/* Photos upload Recipes */
+.photos-container {
+  display: flex;
+}
+
+.form-inputs p {
+  color: #777;
+  font-size: 1.4rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.form-inputs .photos-upload {
+  width: 149px;
+  height: 149px;
+  border: 1px solid #ddd;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 5px 5px 5px 0;
+}
+
+.form-inputs .photos-upload input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.form-inputs .photos-upload span {
+  font-size: 3.8rem;
+  color: #777;
+}
+
+.photos-container .photos-preview {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.photos-preview .photo {
+  width: 149px;
+  height: 149px;
+  margin: 5px 5px 5px 0;
+  border: 1px solid #ccc;
+  position: relative;
+  animation: show_down 0.5s ease;
+}
+
+.photos-preview .photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photos-preview .photo i {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #dc4747;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.9rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.photos-preview .photo:hover i {
+  opacity: 1;
+}
+
+@media (max-width: 600px) {
+  .photos-container {
+    flex-direction: column;
+  }
+  .form-inputs .photos-upload {
+    margin: 1rem auto;
+  }
+}

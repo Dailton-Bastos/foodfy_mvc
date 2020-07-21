@@ -1,0 +1,53 @@
+/* Admin Area */
+/* Header */
+.menu-admin {
+  padding: 0 calc((100% - 940px) / 2);
+  height: 80px;
+  background-color: var(--dark);
+  display: flex;
+  align-items: center;
+}
+
+.menu-logo {
+  padding: 0 1rem;
+}
+
+.menu-nav.admin ul {
+  margin-left: 5rem;
+}
+
+.menu-nav.admin ul a {
+  color: #fff;
+  opacity: 0.5;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.menu-nav.admin ul a:hover {
+  opacity: 1;
+}
+
+.content-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5rem 0 3rem;
+  order: -1;
+}
+
+.header-btn {
+  display: flex;
+}
+
+@media (max-width: 720px) {
+  .content-header {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .content-header h1 {
+    margin-bottom: 10px;
+  }
+}

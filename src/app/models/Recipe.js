@@ -1,205 +1,119 @@
 const db = require('../../config/database')
-const { date } = require('../../libs/utils')
 
 module.exports = {
-  all(res, params, cb) {
-    const { limit, offset } = params
+  all(params) {
+    try {
+      const { limit, offset } = params
 
-    const query = `
-    SELECT recipes.*,
-    (SELECT count(*) FROM recipes) AS total,
-    chefs.name AS chef
-    FROM recipes
-    LEFT JOIN chefs
-    ON (recipes.chef_id = chefs.id)
-    ORDER BY recipes.title ASC
-    LIMIT $1 OFFSET $2
+      const query = `
+        SELECT recipes.*,
+        (SELECT count(*) FROM recipes) AS total,
+        chefs.name AS chef
+        FROM recipes
+        LEFT JOIN chefs
+        ON (recipes.chef_id = chefs.id)
+        ORDER BY updated_at DESC
+        LIMIT $1 OFFSET $2
+      `
+      return db.query(query, [limit, offset])
+    } catch (error) {
+      throw new Error(error)
+    }
+  },
+
+  create(data) {
+    try {
+      const query = `
+        INSERT INTO recipes (
+          title,
+          ingredients,
+          preparation,
+          information,
+          chef_id
+        )
+        VALUES ($1,$2,$3,$4,$5)
+        RETURNING id
+      `
+
+      const { title, ingredients, preparation, information, chef } = data
+
+      const values = [title, ingredients, preparation, information, chef]
+
+      return db.query(query, values)
+    } catch (error) {
+      throw new Error(error)
+    }
+  },
+
+  allChefs() {
+    try {
+      return db.query('SELECT id, name FROM chefs')
+    } catch (error) {
+      throw new Error(error)
+    }
+  },
+
+  find(id) {
+    try {
+      const query = `
+        SELECT recipes.*, chefs.name AS chef
+        FROM recipes
+        LEFT JOIN chefs ON (recipes.chef_id = chefs.id)
+        WHERE recipes.id = $1
+        ORDER BY recipes.title ASC
+      `
+
+      return db.query(query, [id])
+    } catch (error) {
+      throw new Error(error)
+    }
+  },
+
+  update(data) {
+    try {
+      const query = `
+        UPDATE recipes SET
+        title=($1),
+        ingredients=($2),
+        preparation=($3),
+        information=($4),
+        chef_id=($5)
+        WHERE id=($6)
     `
-    db.query(query, [limit, offset], (err, results) => {
-      if (err || !results.rows) {
-        return res.render('_partials/not-found', {
-          info: {
-            msg: 'Error ao listar receitas',
-            page_title: 'Error ou página não encontrada',
-          },
-        })
-      }
+      const { title, ingredients, preparation, information, chef, id } = data
 
-      return cb(results.rows)
-    })
+      const values = [title, ingredients, preparation, information, chef, id]
+
+      return db.query(query, values)
+    } catch (error) {
+      throw new Error(error)
+    }
   },
 
-  create(data, res, cb) {
+  delete(id) {
+    try {
+      const query = 'DELETE FROM recipes WHERE id = $1'
+
+      return db.query(query, [id])
+    } catch (error) {
+      throw new Error(error)
+    }
+  },
+
+  mostAccessed() {
     const query = `
-    INSERT INTO recipes (
-      chef_id,
-      title,
-      image_url,
-      ingredients,
-      preparation,
-      information,
-      created_at
-    ) VALUES ($1,$2,$3,$4,$5,$6,$7)
-      RETURNING id
-    `
-
-    const {
-      image_url,
-      title,
-      ingredients,
-      preparation,
-      information,
-      chef,
-    } = data
-
-    const values = [
-      chef,
-      title,
-      image_url,
-      ingredients,
-      preparation,
-      information,
-      date(Date.now()).iso,
-    ]
-
-    db.query(query, values, (err, results) => {
-      if (err || !results.rows[0]) {
-        return res.render('_partials/not-found', {
-          info: {
-            msg: 'Error ao salvar receita',
-            page_title: 'Error ou página não encontrada',
-          },
-        })
-      }
-      return cb(results.rows[0])
-    })
-  },
-
-  selectChef(res, cb) {
-    const query = `SELECT id, name FROM chefs`
-
-    db.query(query, (err, results) => {
-      if (err || !results.rows) {
-        return res.render('_partials/not-found', {
-          info: {
-            msg: 'Error na listagem de chefs',
-            page_title: 'Error ou página não encontrada',
-          },
-        })
-      }
-      return cb(results.rows)
-    })
-  },
-
-  find(id, res, cb) {
-    const query = `
-    SELECT recipes.*, chefs.name AS chef
-    FROM recipes
-    LEFT JOIN chefs ON (recipes.chef_id = chefs.id)
-    WHERE recipes.id = $1
-    ORDER BY recipes.title ASC
-    `
-
-    db.query(query, [id], (err, results) => {
-      if (err || !results.rows[0]) {
-        return res.render('_partials/not-found', {
-          info: {
-            msg: 'Error ou receita não encontrada',
-            page_title: 'Error ou página não encontrada',
-          },
-        })
-      }
-
-      return cb(results.rows[0])
-    })
-  },
-
-  update(data, res, cb) {
-    const query = `
-      UPDATE recipes SET
-      chef_id=($1),
-      title=($2),
-      image_url=($3),
-      ingredients=($4),
-      preparation=($5),
-      information=($6)
-      WHERE id=($7)
-    `
-    const {
-      chef,
-      title,
-      image_url,
-      ingredients,
-      preparation,
-      information,
-      id,
-    } = data
-
-    const values = [
-      chef,
-      title,
-      image_url,
-      ingredients,
-      preparation,
-      information,
-      id,
-    ]
-
-    db.query(query, values, (err, results) => {
-      if (err || !results.rows) {
-        return res.render('_partials/not-found', {
-          info: {
-            msg: 'Error ao atualizar receita',
-            page_title: 'Error ou página não encontrada',
-          },
-        })
-      }
-
-      return cb()
-    })
-  },
-
-  destroy(id, res, cb) {
-    const query = `DELETE FROM recipes WHERE id = $1`
-
-    db.query(query, [id], (err) => {
-      if (err) {
-        return res.render('_partials/not-found', {
-          info: {
-            msg: 'Error ao excluir receita',
-            page_title: 'Error ou página não encontrada',
-          },
-        })
-      }
-      return cb()
-    })
-  },
-
-  mostAccessed(res, cb) {
-    const query = `
-    SELECT recipes.id, recipes.title, recipes.image_url, chefs.name AS chef
-    FROM recipes
-    INNER JOIN chefs
-    ON recipes.chef_id = chefs.id
-    ORDER BY random()
-    LIMIT 6
+      SELECT recipes.*, chefs.name AS chef
+      FROM recipes
+      INNER JOIN chefs
+      ON recipes.chef_id = chefs.id
+      ORDER BY random()
+      LIMIT 6
     `
 
-    db.query(query, (err, results) => {
-      if (err || !results.rows) {
-        return res.render('_partials/not-found', {
-          info: {
-            msg: 'Error ao listar receitas',
-            page_title: 'Error ou página não encontrada',
-          },
-        })
-      }
-
-      return cb(results.rows)
-    })
+    return db.query(query)
   },
 
-  search(res, params, cb) {
+  search(params) {
     const { filter, limit, offset } = params
 
     let query = ''
@@ -213,10 +127,7 @@ module.exports = {
     }
 
     query = `
-      SELECT recipes.id,
-      recipes.image_url,
-      recipes.title,
-      chefs.name AS chef,
+      SELECT recipes.*, chefs.name AS chef,
       ${totalQuery}
       FROM recipes
       LEFT JOIN chefs
@@ -226,17 +137,22 @@ module.exports = {
       LIMIT $1 OFFSET $2
     `
 
-    db.query(query, [limit, offset], (err, results) => {
-      if (err || !results.rows) {
-        return res.render('_partials/not-found', {
-          info: {
-            msg: 'Error ao buscar receita',
-            page_title: 'Error ou página não encontrada',
-          },
-        })
-      }
+    return db.query(query, [limit, offset])
+  },
 
-      return cb(results.rows)
-    })
+  files(recipe_id) {
+    try {
+      const query = `
+        SELECT DISTINCT files.*, COUNT(*) AS total_files FROM files
+        INNER JOIN recipe_files
+          ON files.id = recipe_files.file_id
+        INNER JOIN recipes
+          ON recipe_files.recipe_id = $1
+        GROUP BY files.id
+    `
+      return db.query(query, [recipe_id])
+    } catch (error) {
+      throw new Error(error)
+    }
   },
 }

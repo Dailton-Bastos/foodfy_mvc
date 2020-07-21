@@ -17,7 +17,11 @@
         {% for recipe in recipes %}
           <li class="admin-recipe">
             <div class="img">
-              <img src="{{ recipe.image_url }}" alt="{{ recipe.title }}" />
+            {% if recipe.img %}
+              <img src="{{ recipe.img }}" alt="{{ recipe.title }}" />
+            {% else %}
+              <img src="http://placehold.it/190x80?text=RECEITA SEM FOTO" >
+            {% endif %}
             </div>
 
             <div class="details">
