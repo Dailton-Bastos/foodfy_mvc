@@ -66,14 +66,14 @@ module.exports = {
       FROM recipes
       WHERE chef_id = $1
       GROUP BY recipes.id
-      ORDER BY recipes.title
+      ORDER BY recipes.created_at DESC
       LIMIT $2 OFFSET $3
       `
 
     return db.query(query, [id, limit, offset])
   },
 
-  async update(data) {
+  update(data) {
     const { name, id, file_id, removed_files } = data
 
     let values = [name, id]
