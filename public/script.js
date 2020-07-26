@@ -322,6 +322,15 @@ const Alert = {
   },
 }
 
+const ConfirmDelete = {
+  confirm: false,
+  handleDelete(event) {
+    ConfirmDelete.confirm = window.confirm('Tem certeza que deseja deletar?')
+
+    if (!ConfirmDelete.confirm) event.preventDefault()
+  },
+}
+
 activePaginate()
 
 this.onload = Menu.activeLink()

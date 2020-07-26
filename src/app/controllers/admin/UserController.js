@@ -93,4 +93,19 @@ module.exports = {
       throw new Error(error)
     }
   },
+
+  async delete(req, res) {
+    const { id } = req.params
+
+    try {
+      await User.delete(id)
+
+      req.flash('success', 'Conta deletada com sucesso.')
+      return res.redirect('/admin/users')
+    } catch (error) {
+      req.flash('error', 'Erro ao deletar conta!')
+      res.redirect('/admin/users')
+      throw new Error(error)
+    }
+  },
 }

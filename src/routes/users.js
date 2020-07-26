@@ -13,5 +13,6 @@ routes.get('/:id/edit', Vaildator.edit, UserController.edit)
 
 routes.post('/', Vaildator.post, UserController.post)
 routes.put('/:id', Vaildator.update, UserController.update)
+routes.delete('/:id', UserController.delete)
 
 module.exports = routes

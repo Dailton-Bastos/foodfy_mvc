@@ -87,4 +87,14 @@ module.exports = {
       throw new Error(error)
     }
   },
+
+  async delete(id) {
+    const query = 'DELETE FROM users WHERE id = $1'
+
+    try {
+      await db.query(query, [id])
+    } catch (error) {
+      throw new Error(error)
+    }
+  },
 }
