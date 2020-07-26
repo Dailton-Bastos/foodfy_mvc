@@ -6,6 +6,12 @@
   background-color: var(--dark);
   display: flex;
   align-items: center;
+  justify-content: space-between;
+}
+
+.menu-admin .menu {
+  display: flex;
+  align-items: center;
 }
 
 .menu-logo {
@@ -25,6 +31,24 @@
 }
 
 .menu-nav.admin ul a:hover {
+  opacity: 1;
+}
+
+.menu-admin form button {
+  display: block;
+  color: #fff;
+  opacity: 0.5;
+  font-weight: bold;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  border: none;
+  padding: 8px;
+  margin-right: 1rem;
+  background-color: var(--dark);
+  transition: all 0.3s ease;
+}
+
+.menu-admin form button:hover {
   opacity: 1;
 }
 

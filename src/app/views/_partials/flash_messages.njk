@@ -1,0 +1,17 @@
+{% for message in messageSuccess %}
+  <div class="alert success">
+    <div class="message" onclick="Alert.remove(event)">
+      <p>{{ message }}</p>
+      <button type="button">x</button>
+    </div>
+  </div>
+{% endfor %}
+
+{% for message in messageError %}
+  <div class="alert error">
+    <div class="message" onclick="Alert.remove(event)">
+      <p>{{ message }}</p>
+      <button type="button">x</button>
+    </div>
+  </div>
+{% endfor %}

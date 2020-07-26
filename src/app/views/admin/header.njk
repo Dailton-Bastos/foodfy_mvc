@@ -1,16 +1,23 @@
 <header>
   <div class="menu-admin">
-    <div class="menu-logo">
-      <a href="/admin/recipes">
-        <img src="/images/Foodfy.png" alt="Foodfy Logo" />
-      </a>
+    <div class="menu">
+      <div class="menu-logo">
+        <a href="/admin/recipes">
+          <img src="/images/Foodfy.png" alt="Foodfy Logo" />
+        </a>
+      </div>
+
+      <nav class="menu-nav admin" data-menu="links">
+        <ul>
+          <li><a href="/admin/recipes">Receitas</a></li>
+          <li><a href="/admin/chefs">Chefs</a></li>
+          <li><a href="/admin/users">Usuários</a></li>
+        </ul>
+      </nav>
     </div>
 
-    <nav class="menu-nav admin" data-menu="links">
-      <ul>
-        <li><a href="/admin/recipes">Receitas</a></li>
-        <li><a href="/admin/chefs">Chefs</a></li>
-      </ul>
-    </nav>
+    <form action="#" method="post">
+      <button type="submit">Sair</button>
+    </form>
   </div>
 </header>

@@ -1,0 +1,129 @@
+/* Input new users */
+.form-inputs-users {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-inputs-users .inputs {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.inputs .content {
+  display: flex;
+  flex-direction: column;
+  max-width: 450px;
+  width: 100%;
+  position: relative;
+}
+
+.inputs .content:first-child {
+  margin-right: 2rem;
+}
+
+.inputs .content:last-child {
+  margin-left: 2rem;
+}
+
+.form-inputs-users label {
+  color: var(--dark);
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+.inputs .content input {
+  height: 40px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 1rem;
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+
+.inputs .content input:focus {
+  outline: 0;
+  border-color: #ddd;
+}
+
+.inputs .content.success input {
+  border-color: var(--purple);
+}
+
+.inputs .content.error input {
+  border-color: var(--danger);
+}
+
+.inputs .content small {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: var(--danger);
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  visibility: hidden;
+}
+
+.inputs .content.error small {
+  visibility: visible;
+}
+
+.form-inputs-users .check {
+  display: flex;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.form-inputs-users input[type='checkbox'] {
+  order: -1;
+  margin-right: 8px;
+  position: relative;
+  width: 40px;
+  height: 20px;
+  appearance: none;
+  background-color: #c6c6c6;
+  outline: none;
+  border-radius: 10px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  transition: 0.5s;
+}
+
+.form-inputs-users input:checked[type='checkbox'] {
+  background-color: var(--purple);
+}
+
+.form-inputs-users input[type='checkbox']::before {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  top: 0;
+  left: 0;
+  background-color: #fff;
+  transform: scale(1.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: 0.5s;
+}
+
+.form-inputs-users input:checked[type='checkbox']::before {
+  left: 20px;
+}
+
+@media (max-width: 600px) {
+  .form-inputs-users .inputs {
+    flex-direction: column;
+  }
+  .inputs .content {
+    max-width: 100%;
+  }
+
+  .inputs .content:first-child {
+    margin-right: 0;
+  }
+
+  .inputs .content:last-child {
+    margin-left: 0;
+  }
+}

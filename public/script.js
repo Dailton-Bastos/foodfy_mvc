@@ -252,6 +252,76 @@ const ImageGallery = {
   },
 }
 
+const Validate = {
+  fieldsFill: true,
+  emailValid: true,
+
+  apply(event) {
+    const form = event.target
+    const name = form.querySelector('input[name="name"]')
+    const email = form.querySelector('input[name="email"]')
+
+    Validate.checkRequired([name, email])
+    Validate.checkEmail(email)
+
+    const { fieldsFill, emailValid } = Validate
+
+    if (!emailValid || !fieldsFill) event.preventDefault()
+  },
+
+  // show input error message
+  showError(input, message) {
+    const formControl = input.parentElement
+    formControl.className = 'content error'
+    const small = formControl.querySelector('small')
+    small.innerText = message
+  },
+
+  clearErrors(input) {
+    const messageError = input.nextElementSibling
+    if (messageError) messageError.style.visibility = 'hidden'
+  },
+
+  showSuccess(input) {
+    const formControl = input.parentElement
+    formControl.className = 'content success'
+  },
+
+  // Check emais is valid
+  checkEmail(input) {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
+    if (re.test(String(input.value).trim())) {
+      Validate.showSuccess(input)
+      Validate.emailValid = true
+    } else {
+      Validate.showError(input, 'Email não pode ser em branco ou é inválido*')
+      Validate.emailValid = false
+    }
+  },
+
+  // Check required fields
+  checkRequired(values) {
+    Validate.fieldsFill = values.every((input) => input.value.trim() !== '')
+
+    values.forEach((input) => {
+      if (input.value.trim() === '') {
+        Validate.showError(input, 'Este campo é obrigatório*')
+      } else {
+        Validate.showSuccess(input)
+      }
+    })
+  },
+}
+
+const Alert = {
+  button: '',
+  remove(event) {
+    Alert.button = event.target
+    Alert.button.parentElement.remove()
+  },
+}
+
 activePaginate()
 
 this.onload = Menu.activeLink()
