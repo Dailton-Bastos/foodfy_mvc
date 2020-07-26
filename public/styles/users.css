@@ -127,3 +127,82 @@
     margin-left: 0;
   }
 }
+
+/* Admin Users index */
+.users-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-self: center;
+  margin-top: 7rem;
+}
+
+.users-list .user {
+  display: flex;
+  flex-direction: column;
+  max-width: 200px;
+  width: 100%;
+  margin-right: 10rem;
+  margin-bottom: 5rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--purple);
+}
+
+.users-list .user h2 {
+  font-size: 1.8rem;
+  font-weight: normal;
+  line-height: 22px;
+  color: var(--dark);
+  margin: 4px 0;
+}
+
+.users-list .user p {
+  font-size: 1.4rem;
+  line-height: 17px;
+  color: #777;
+}
+
+.users-list .user span {
+  font-size: 1.4rem;
+  font-style: italic;
+  color: #777;
+  margin-top: 5px;
+}
+
+.users-list .user .buttons {
+  display: flex;
+  align-items: center;
+  margin-top: 1.8rem;
+}
+
+.users-list .user .buttons a,
+.users-list .user .buttons button {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: bold;
+  line-height: 17px;
+  margin-right: 1.6rem;
+  text-transform: capitalize;
+}
+
+.users-list .user .buttons a {
+  color: var(--purple);
+}
+
+.users-list .user .buttons button {
+  border: none;
+  background-color: transparent;
+  color: var(--danger);
+}
+
+@media (max-width: 600px) {
+  .users-list .user {
+    margin-right: 5rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .users-list {
+    flex-direction: column;
+  }
+}

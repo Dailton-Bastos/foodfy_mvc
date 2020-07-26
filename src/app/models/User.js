@@ -2,6 +2,20 @@ const { hash } = require('bcryptjs')
 const db = require('../../config/database')
 
 module.exports = {
+  async findAll(params) {
+    const { limit, offset } = params
+
+    const query = `
+      SELECT users.id, users.name, users.email, users.is_admin,
+      (SELECT DISTINCT COUNT(*) FROM users) AS total
+      FROM users
+      ORDER BY users.created_at DESC
+      LIMIT $1 OFFSET $2
+    `
+
+    return db.query(query, [limit, offset])
+  },
+
   async findOne(filters) {
     try {
       let query = `

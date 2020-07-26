@@ -12,5 +12,29 @@
       </div>
     </div>
 
+    <div class="users-list">
+      {% for user in users %}
+        <div class="user">
+          <h2>{{ user.name }}</h2>
+          <p>{{ user.email }}</p>
+
+          <div class="buttons">
+            <a href="/admin/users/{{ user.id }}/edit">Editar</a>
+            <form
+              action="/admin/users/{{ user.id }}?_method=DELETE"
+              method="post"
+              data-form="delete">
+
+              <button type="submit">Remover</button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+  {% if pagination.total > 1 %}
+    {% include "_partials/pagination.njk" %}
+  {% endif %}
+
   </section>
 {% endblock %}

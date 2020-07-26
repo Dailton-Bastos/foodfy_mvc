@@ -2,14 +2,29 @@ const { randomBytes } = require('crypto')
 
 const User = require('../../models/User')
 
+const { pageLimit, paginate } = require('../../../libs/utils')
+
 module.exports = {
-  index(req, res) {
+  async index(req, res) {
     const info = {
       page_title: 'Foodfy | Gerenciar usuários',
       content_title: 'Gerenciar usuários',
     }
 
-    return res.render('admin/users/index', { info })
+    const { page } = req.query
+
+    const params = pageLimit(page, 6)
+
+    try {
+      const results = await User.findAll(params)
+      const users = results.rows
+
+      const pagination = paginate(users, params)
+
+      return res.render('admin/users/index', { info, users, pagination })
+    } catch (error) {
+      throw new Error(error)
+    }
   },
 
   create(req, res) {
@@ -40,5 +55,16 @@ module.exports = {
     } catch (error) {
       throw new Error(error)
     }
+  },
+
+  async show(req, res) {
+    const { user } = req
+
+    const info = {
+      page_title: `Usuário | ${user.name}`,
+      content_title: `Usuário: ${user.name}`,
+    }
+
+    return res.render('admin/users/show', { user, info })
   },
 }
