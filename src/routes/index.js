@@ -26,7 +26,8 @@ routes.use('/admin/recipes', recipes)
 routes.use('/admin/chefs', chefs)
 routes.use('/admin/users', users)
 
-routes.use((_, res) => {
+routes.use((req, res) => {
+  req.flash('error', 'Algo deu errado!')
   return res.status(404).render('_partials/not-found', {
     info: {
       msg: 'Página não encontrada, ou algo deu errado',

@@ -12,6 +12,8 @@
       </div>
     </div>
 
+    {% if users[0] %}
+
     <div class="users-list">
       {% for user in users %}
         <div class="user">
@@ -31,6 +33,9 @@
         </div>
       {% endfor %}
     </div>
+    {% else %}
+      <h1>Nenhum usuário encontrado</h1>
+    {% endif %}
 
   {% if pagination.total > 1 %}
     {% include "_partials/pagination.njk" %}

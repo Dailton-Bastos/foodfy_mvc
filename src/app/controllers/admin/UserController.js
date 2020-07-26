@@ -23,6 +23,8 @@ module.exports = {
 
       return res.render('admin/users/index', { info, users, pagination })
     } catch (error) {
+      req.flash('error', 'Algum error aconteceu!')
+      res.redirect('/admin/users')
       throw new Error(error)
     }
   },
@@ -46,25 +48,49 @@ module.exports = {
         name,
         email,
         password,
-        is_admin,
+        is_admin: is_admin || false,
       })
 
-      req.flash('success', 'Usuário cadastrado com sucesso!')
+      req.flash('success', 'Usuário cadastrado com sucesso.')
 
       return res.redirect('/admin/users')
     } catch (error) {
+      req.flash('error', 'Error ao criar usuário!')
+      res.redirect(`/admin/users/new`)
       throw new Error(error)
     }
   },
 
-  async show(req, res) {
+  edit(req, res) {
     const { user } = req
 
     const info = {
-      page_title: `Usuário | ${user.name}`,
-      content_title: `Usuário: ${user.name}`,
+      page_title: `Atualizar | ${user.name}`,
+      content_title: 'Atualizar usuário',
     }
 
-    return res.render('admin/users/show', { user, info })
+    return res.render('admin/users/edit', { info, user })
+  },
+
+  async update(req, res) {
+    try {
+      const { id } = req.user
+
+      const { name, email, is_admin } = req.body
+
+      await User.update(id, {
+        name,
+        email,
+        is_admin: is_admin || false,
+      })
+
+      req.flash('success', 'Usuário atualizado com sucesso.')
+      return res.redirect('/admin/users')
+    } catch (error) {
+      const { id } = req.user
+      req.flash('error', 'Error ao atualizar usuário!')
+      res.redirect(`/admin/users/${id}/edit`)
+      throw new Error(error)
+    }
   },
 }

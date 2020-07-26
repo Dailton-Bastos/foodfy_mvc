@@ -57,4 +57,34 @@ module.exports = {
       throw new Error(error)
     }
   },
+
+  async findByPk(pk) {
+    const query = 'SELECT users.* FROM users WHERE id = $1'
+
+    try {
+      const user = await db.query(query, [pk])
+
+      return user.rows[0]
+    } catch (error) {
+      throw new Error(error)
+    }
+  },
+
+  async update(id, fields) {
+    let query = 'UPDATE users SET'
+
+    try {
+      Object.keys(fields).forEach((key, index, array) => {
+        if (index + 1 < array.length) {
+          query = `${query} ${key} = '${fields[key]}',`
+        } else {
+          query = `${query} ${key} = '${fields[key]}' WHERE id = ${id}`
+        }
+      })
+
+      await db.query(query)
+    } catch (error) {
+      throw new Error(error)
+    }
+  },
 }

@@ -9,7 +9,9 @@ const Vaildator = require('../app/validators/user')
 // Admin Users
 routes.get('/', UserController.index)
 routes.get('/new', UserController.create)
+routes.get('/:id/edit', Vaildator.edit, UserController.edit)
 
 routes.post('/', Vaildator.post, UserController.post)
+routes.put('/:id', Vaildator.update, UserController.update)
 
 module.exports = routes
