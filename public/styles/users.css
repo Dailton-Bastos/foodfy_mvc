@@ -154,6 +154,7 @@
   line-height: 22px;
   color: var(--dark);
   margin: 4px 0;
+  text-transform: capitalize;
 }
 
 .users-list .user p {

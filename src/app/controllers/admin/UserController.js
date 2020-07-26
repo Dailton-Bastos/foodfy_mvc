@@ -3,6 +3,7 @@ const { randomBytes } = require('crypto')
 const User = require('../../models/User')
 
 const { pageLimit, paginate } = require('../../../libs/utils')
+const { sendMail } = require('../../../libs/Mail')
 
 module.exports = {
   async index(req, res) {
@@ -52,6 +53,13 @@ module.exports = {
       })
 
       req.flash('success', 'Usuário cadastrado com sucesso.')
+
+      await sendMail({
+        to: `${name} <${email}>`,
+        subject: 'Senha de acesso ao Foodfy',
+        template: 'send_password',
+        context: { name, password },
+      })
 
       return res.redirect('/admin/users')
     } catch (error) {
