@@ -9,6 +9,8 @@ const site = require('./site')
 const recipes = require('./recipes')
 const chefs = require('./chefs')
 const users = require('./users')
+const profile = require('./profile')
+const auth = require('./auth')
 
 // Flash Messages
 routes.use((req, res, next) => {
@@ -25,15 +27,21 @@ routes.use('/app', site)
 routes.use('/admin/recipes', recipes)
 routes.use('/admin/chefs', chefs)
 routes.use('/admin/users', users)
+routes.use('/admin/profile', profile)
+routes.use('/', auth)
 
-routes.use((req, res) => {
-  req.flash('error', 'Algo deu errado!')
-  return res.status(404).render('_partials/not-found', {
+routes.use('/not-found', (req, res) => {
+  return res.render('_partials/not-found', {
     info: {
-      msg: 'Página não encontrada, ou algo deu errado',
       page_title: 'Página não encontrada',
+      msg: 'Página não encontrada, ou algo deu errado.',
     },
   })
+})
+
+routes.use((req, res) => {
+  req.flash('error', 'Página não encontrada!')
+  return res.redirect('/not-found')
 })
 
 module.exports = routes

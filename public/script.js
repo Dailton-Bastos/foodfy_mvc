@@ -258,10 +258,10 @@ const Validate = {
 
   apply(event) {
     const form = event.target
-    const name = form.querySelector('input[name="name"]')
+    const requiredFields = form.querySelectorAll('[data-field]')
     const email = form.querySelector('input[name="email"]')
 
-    Validate.checkRequired([name, email])
+    Validate.checkRequired([...requiredFields])
     Validate.checkEmail(email)
 
     const { fieldsFill, emailValid } = Validate
@@ -275,11 +275,6 @@ const Validate = {
     formControl.className = 'content error'
     const small = formControl.querySelector('small')
     small.innerText = message
-  },
-
-  clearErrors(input) {
-    const messageError = input.nextElementSibling
-    if (messageError) messageError.style.visibility = 'hidden'
   },
 
   showSuccess(input) {
