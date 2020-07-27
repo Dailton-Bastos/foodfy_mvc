@@ -8,13 +8,15 @@
   "private": false,
   "scripts": {
     "debug": "nodemon --inspect=0.0.0.0:9229 src/server.js",
-    "dev": "npm-run-all -p nodemon browsersync",
+    "dev": "npm-run-all -p nodemon queue browsersync",
+    "queue": "nodemon src/queue.js",
     "nodemon": "nodemon src/server.js -e js",
     "browsersync": "browser-sync start --proxy http://localhost:3333 --files './public, src/app/views' --no-notify",
     "eslint-fix": "eslint --fix src --ext .js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "bee-queue": "^1.2.3",
     "connect-flash": "^0.1.1",
     "connect-pg-simple": "^6.1.0",
     "express": "^4.17.1",
