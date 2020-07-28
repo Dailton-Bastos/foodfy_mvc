@@ -2,7 +2,7 @@
   <div class="menu-admin">
     <div class="menu">
       <div class="menu-logo">
-        <a href="/admin/recipes">
+        <a href="/admin/profile">
           <img src="/images/Foodfy.png" alt="Foodfy Logo" />
         </a>
       </div>
@@ -10,8 +10,10 @@
       <nav class="menu-nav admin" data-menu="links">
         <ul>
           <li><a href="/admin/recipes">Receitas</a></li>
-          <li><a href="/admin/chefs">Chefs</a></li>
-          <li><a href="/admin/users">Usuários</a></li>
+          {% if session.is_admin %}
+            <li><a href="/admin/chefs">Chefs</a></li>
+            <li><a href="/admin/users">Usuários</a></li>
+          {% endif %}
           <li><a href="/admin/profile">Perfil</a></li>
         </ul>
       </nav>
