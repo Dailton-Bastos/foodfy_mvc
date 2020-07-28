@@ -14,4 +14,11 @@ module.exports = {
 
     return res.redirect('/admin/profile')
   },
+
+  logout(req, res) {
+    req.session.destroy(() => {
+      res.clearCookie('root')
+      return res.redirect('/')
+    })
+  },
 }

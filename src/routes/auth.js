@@ -8,5 +8,6 @@ const Validator = require('../app/validators/auth')
 // Auth Session
 routes.get('/signin', SessionController.create)
 routes.post('/signin', Validator.signin, SessionController.login)
+routes.post('/logout', SessionController.logout)
 
 module.exports = routes
