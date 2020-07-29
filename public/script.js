@@ -255,11 +255,15 @@ const ImageGallery = {
 const Validate = {
   fieldsFill: true,
   emailValid: true,
+  passwordMatch: true,
 
   apply(event) {
     const form = event.target
     const requiredFields = form.querySelectorAll('[data-field]')
     const email = form.querySelector('input[name="email"]')
+
+    const password = form.querySelector('[data-password]')
+    const passwordConfirm = form.querySelector('[data-passwordConfirm]')
 
     Validate.checkRequired([...requiredFields])
     Validate.checkEmail(email)
@@ -267,6 +271,14 @@ const Validate = {
     const { fieldsFill, emailValid } = Validate
 
     if (!emailValid || !fieldsFill) event.preventDefault()
+
+    if (passwordConfirm) {
+      const passwordsMatch = Validate.passwordsMatch(passwordConfirm, password)
+
+      const passwordLength = Validate.passwordLength(password, 10, 15)
+
+      if (!passwordsMatch || !passwordLength) event.preventDefault()
+    }
   },
 
   // show input error message
@@ -306,6 +318,30 @@ const Validate = {
         Validate.showSuccess(input)
       }
     })
+  },
+
+  passwordsMatch(confirmPassword, password) {
+    if (confirmPassword.value !== password.value) {
+      Validate.showError(
+        confirmPassword,
+        'A senha e a confirmação de senha estão incorretas!'
+      )
+      return false
+    }
+    return true
+  },
+
+  passwordLength(password, min, max) {
+    if (password.value.length < min) {
+      Validate.showError(password, 'A senha deve ter no mínimo 10 caracteres!')
+      return false
+    }
+    if (password.value.length > max) {
+      Validate.showError(password, 'A senha deve ter no máximo 15 caracteres!')
+      return false
+    }
+    Validate.showSuccess(password)
+    return true
   },
 }
 

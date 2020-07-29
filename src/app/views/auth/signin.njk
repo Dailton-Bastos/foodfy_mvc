@@ -9,10 +9,31 @@
 
     <h1>Iniciar Sessão</h1>
 
-    {% include "./_form.njk" %}
+      <div class="inputs">
+        <div class="content">
+          <label>Email</label>
+          <input
+            name="email"
+            placeholder="Digite seu email"
+            data-field
+          >
+          <small>Error message</small>
+        </div>
+
+        <div class="content">
+          <label>Senha</label>
+          <input
+            type="password"
+            name="password"
+            placeholder="Digite sua senha"
+            data-field
+          >
+          <small>Error message</small>
+      </div>
+    </div>
 
     <div class="auth-footer">
-      <a href="#">Perdeu a senha?</a>
+      <a href="/reset-password">Perdeu a senha?</a>
 
       <button type="submit" class="btn btn-primary">Acessar</button>
     </div>

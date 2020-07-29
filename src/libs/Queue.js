@@ -1,8 +1,9 @@
 const Bee = require('bee-queue')
 const SendPasswordMail = require('../app/jobs/SendPasswordMail')
+const ResetPasswordMail = require('../app/jobs/ResetPasswordMail')
 const redisConfig = require('../config/redis')
 
-const jobs = [SendPasswordMail]
+const jobs = [SendPasswordMail, ResetPasswordMail]
 
 const queues = {}
 
