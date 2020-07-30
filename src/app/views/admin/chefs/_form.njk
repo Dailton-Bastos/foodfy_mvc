@@ -1,15 +1,20 @@
   <div class="form-inputs">
 
-    <label for="name">Nome</label>
-    <input
-      type="text"
-      id="name"
-      name="name"
-      {% if chef.name %}
-        value="{{ chef.name }}"
-      {% endif %}
-      required
-    />
+    <div class="inputs">
+      <div class="content">
+        <label for="name">Nome</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          {% if chef.name %}
+            value="{{ chef.name }}"
+          {% endif %}
+          data-user="name"
+        />
+        <small>Error message</small>
+      </div>
+    </div>
 
     <label>Avatar</label>
     <div class="photos-container">

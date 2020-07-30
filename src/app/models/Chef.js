@@ -33,7 +33,7 @@ module.exports = {
     return db.query(query, values)
   },
 
-  find(id) {
+  async findByPk(id) {
     const query = `
       SELECT chefs.*,
       COUNT(recipes) As total_recipes
@@ -44,7 +44,8 @@ module.exports = {
       GROUP BY chefs.id
       ORDER BY total_recipes DESC`
 
-    return db.query(query, [id])
+    const chef = await db.query(query, [id])
+    return chef.rows[0]
   },
 
   avatar(id) {
@@ -71,6 +72,16 @@ module.exports = {
       `
 
     return db.query(query, [id, limit, offset])
+  },
+
+  recipeFindOne(id) {
+    const query = `
+      SELECT recipes.chef_id
+      FROM recipes
+      WHERE chef_id = $1
+    `
+
+    return db.query(query, [id])
   },
 
   update(data) {

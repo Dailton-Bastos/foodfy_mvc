@@ -60,14 +60,6 @@ module.exports = {
   },
 
   async post(req, res) {
-    const keys = Object.keys(req.body)
-
-    keys.forEach((key) => {
-      const isValid = req.body[key] === '' && key !== 'file'
-      if (isValid) return res.send('Nome é obrigatório')
-      return isValid
-    })
-
     try {
       const { name } = req.body
 
@@ -86,15 +78,24 @@ module.exports = {
 
       const { id } = chef.rows[0]
 
+      req.flash('success', 'Chef cadastrado com sucesso.')
+
       return res.redirect(`/admin/chefs/${id}`)
     } catch (error) {
+      req.flash('error', 'Houve um erro, tente novamente!')
+      res.redirect('/admin/chefs/new')
       throw new Error(error)
     }
   },
 
   async show(req, res) {
-    const { id } = req.params
+    const { chef } = req
     const { page } = req.query
+
+    const info = {
+      page_title: `Chef | ${chef.name}`,
+      content_title: `Chef: ${chef.name}`,
+    }
 
     async function getRecipeImage(recipeId) {
       const results = await Recipe.files(recipeId)
@@ -107,19 +108,9 @@ module.exports = {
     }
 
     try {
-      let results = await Chefs.find(id)
-      const chef = results.rows[0]
-
-      if (!chef) return res.send('Chef not found')
-
-      const info = {
-        page_title: `Chef | ${chef.name}`,
-        content_title: `Chef: ${chef.name}`,
-      }
-
       const { file_id } = chef
 
-      results = await Chefs.avatar(file_id)
+      let results = await Chefs.avatar(file_id)
 
       const file = results.rows[0]
 
@@ -129,7 +120,7 @@ module.exports = {
 
       const params = pageLimit(page, 4)
 
-      results = await Chefs.recipes(id, params)
+      results = await Chefs.recipes(chef.id, params)
 
       const recipes = results.rows
 
@@ -155,22 +146,17 @@ module.exports = {
   },
 
   async edit(req, res) {
-    const { id } = req.params
+    const { chef } = req
+
+    const info = {
+      page_title: `Editando | ${chef.name}`,
+      content_title: 'Editando chef',
+    }
 
     try {
-      let results = await Chefs.find(id)
-      const chef = results.rows[0]
-
-      if (!chef) return res.send('Chef not found')
-
-      const info = {
-        page_title: `Editando | ${chef.name}`,
-        content_title: 'Editando chef',
-      }
-
       const { file_id } = chef
 
-      results = await Chefs.avatar(file_id)
+      const results = await Chefs.avatar(file_id)
 
       const file = results.rows[0]
 
@@ -185,15 +171,6 @@ module.exports = {
   },
 
   async put(req, res) {
-    const keys = Object.keys(req.body)
-
-    keys.forEach((key) => {
-      const isValid =
-        req.body[key] === '' && key !== 'file' && key !== 'removed_files'
-      if (isValid) return res.send('Nome é obrigatório')
-      return isValid
-    })
-
     const { id, removed_files } = req.body
 
     try {
@@ -211,31 +188,31 @@ module.exports = {
         await File.delete(avatar_id)
       }
 
+      req.flash('success', 'Chef atualizado com sucesso.')
+
       return res.redirect(`/admin/chefs/${id}`)
     } catch (error) {
+      req.flash('error', 'Houve um error, tente novamente!')
+      res.redirect(`/admin/chefs/${id}`)
       throw new Error(error)
     }
   },
 
   async delete(req, res) {
-    const { id } = req.params
+    const { id, file_id } = req.chef
 
-    const { page } = req.query
+    try {
+      await Chefs.delete(id)
 
-    const params = pageLimit(page, 1)
+      if (file_id) await File.delete(file_id)
 
-    let results = await Chefs.recipes(id, params)
-    const recipe = results.rows[0]
+      req.flash('success', 'Chef deletado com sucesso.')
 
-    if (recipe) return res.send('Não é possível deletar chef')
-
-    results = await Chefs.find(id)
-    const { file_id } = results.rows[0]
-
-    await Chefs.delete(id)
-
-    if (file_id) await File.delete(file_id)
-
-    return res.redirect(`/admin/chefs`)
+      return res.redirect(`/admin/chefs`)
+    } catch (error) {
+      req.flash('error', 'Houve um error, tente novamente.')
+      res.redirect(`/admin/chefs/${id}`)
+      throw new Error(error)
+    }
   },
 }
