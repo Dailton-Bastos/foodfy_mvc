@@ -1,20 +1,28 @@
 const db = require('../../config/database')
 
 module.exports = {
-  all(params) {
+  findAll(params) {
     try {
-      const { limit, offset } = params
+      const { limit, offset, userId } = params
 
-      const query = `
-        SELECT recipes.*,
-        (SELECT count(*) FROM recipes) AS total,
+      let query = `
+        SELECT DISTINCT recipes.*,
+        (SELECT COUNT(DISTINCT recipes) AS total FROM recipes),
         chefs.name AS chef
         FROM recipes
-        LEFT JOIN chefs
+        INNER JOIN chefs
         ON (recipes.chef_id = chefs.id)
+      `
+      if (userId) {
+        query = `${query}
+          WHERE recipes.user_id = ${userId}
+        `
+      }
+      query = `${query}
         ORDER BY created_at DESC
         LIMIT $1 OFFSET $2
       `
+
       return db.query(query, [limit, offset])
     } catch (error) {
       throw new Error(error)
@@ -29,15 +37,30 @@ module.exports = {
           ingredients,
           preparation,
           information,
-          chef_id
+          chef_id,
+          user_id
         )
-        VALUES ($1,$2,$3,$4,$5)
+        VALUES ($1,$2,$3,$4,$5,$6)
         RETURNING id
       `
 
-      const { title, ingredients, preparation, information, chef } = data
+      const {
+        title,
+        ingredients,
+        preparation,
+        information,
+        chef,
+        user_id,
+      } = data
 
-      const values = [title, ingredients, preparation, information, chef]
+      const values = [
+        title,
+        ingredients,
+        preparation,
+        information,
+        chef,
+        user_id,
+      ]
 
       return db.query(query, values)
     } catch (error) {
@@ -53,17 +76,21 @@ module.exports = {
     }
   },
 
-  find(id) {
+  async findByPk(id) {
     try {
       const query = `
-        SELECT recipes.*, chefs.name AS chef
+        SELECT recipes.*,
+          ( SELECT COUNT(DISTINCT recipe_files) AS total_files
+          FROM recipe_files
+          WHERE recipe_id = $1 ),
+        chefs.name AS chef
         FROM recipes
         LEFT JOIN chefs ON (recipes.chef_id = chefs.id)
         WHERE recipes.id = $1
         ORDER BY recipes.title ASC
       `
-
-      return db.query(query, [id])
+      const results = await db.query(query, [id])
+      return results.rows[0]
     } catch (error) {
       throw new Error(error)
     }
