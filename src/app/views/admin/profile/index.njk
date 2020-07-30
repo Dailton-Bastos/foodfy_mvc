@@ -4,14 +4,20 @@
   {% include "../header.njk" %}
 
   <section class="container">
-
-    <div class="content-header">
-      <h1>{{ info.content_title }}</h1>
-      <div class="new-content">
-        <a href="/admin/users/new" class="btn btn-primary">Salvar</a>
+    <form
+      onsubmit="Validate.apply(event)"
+      action="/admin/profile/{{ session.id }}?_method=PUT"
+      method="post"
+      class="content-form"
+    >
+    {# Inputs #}
+    {% include "./_form.njk" %}
+      <div class="content-header">
+        <h1>{{ info.content_title }}</h1>
+        <div class="header-btn">
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
       </div>
-    </div>
-
-  <h1>Bem vindo</h1>
+    </form>
   </section>
 {% endblock %}

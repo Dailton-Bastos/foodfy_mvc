@@ -206,7 +206,7 @@ img {
 
 /* Flash Messages */
 .alert {
-  max-width: 320px;
+  max-width: 380px;
   position: absolute;
   right: 10px;
   top: 25px;

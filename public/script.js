@@ -252,33 +252,37 @@ const ImageGallery = {
   },
 }
 
+const doc = window.document
+
 const Validate = {
-  fieldsFill: true,
-  emailValid: true,
-  passwordMatch: true,
+  userEmail: doc.querySelector('[data-user="email"]'),
+  username: doc.querySelector('[data-user="name"]'),
+  password: doc.querySelector('[data-password]'),
+  requiredFields: doc.querySelectorAll('[data-required]'),
+  newPassword: doc.querySelector('[data-password="new"]'),
+  newPasswordConfirm: doc.querySelector('[data-password="confirm"]'),
 
   apply(event) {
-    const form = event.target
-    const requiredFields = form.querySelectorAll('[data-field]')
-    const email = form.querySelector('input[name="email"]')
+    const {
+      userEmail,
+      username,
+      password,
+      requiredFields,
+      newPassword,
+      newPasswordConfirm,
+    } = Validate
 
-    const password = form.querySelector('[data-password]')
-    const passwordConfirm = form.querySelector('[data-passwordConfirm]')
+    const { checkEmail, checkLength, checkRequired, passwordsMatch } = Validate
 
-    Validate.checkRequired([...requiredFields])
-    Validate.checkEmail(email)
+    if (userEmail) checkEmail(userEmail, event)
 
-    const { fieldsFill, emailValid } = Validate
+    if (username) checkLength(username, 3, 25, event)
 
-    if (!emailValid || !fieldsFill) event.preventDefault()
+    if (password) checkLength(password, 6, 25, event)
 
-    if (passwordConfirm) {
-      const passwordsMatch = Validate.passwordsMatch(passwordConfirm, password)
+    if (requiredFields) checkRequired(requiredFields, event)
 
-      const passwordLength = Validate.passwordLength(password, 10, 15)
-
-      if (!passwordsMatch || !passwordLength) event.preventDefault()
-    }
+    if (newPassword) passwordsMatch(newPassword, newPasswordConfirm, event)
   },
 
   // show input error message
@@ -295,53 +299,59 @@ const Validate = {
   },
 
   // Check emais is valid
-  checkEmail(input) {
+  checkEmail(input, event) {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
-    if (re.test(String(input.value).trim())) {
-      Validate.showSuccess(input)
-      Validate.emailValid = true
-    } else {
-      Validate.showError(input, 'Email não pode ser em branco ou é inválido*')
-      Validate.emailValid = false
+    const { showSuccess, showError } = Validate
+
+    if (!re.test(String(input.value).trim())) {
+      event.preventDefault()
+      return showError(input, 'Email não pode ser em branco ou é inválido*')
     }
+    return showSuccess(input)
   },
 
   // Check required fields
-  checkRequired(values) {
-    Validate.fieldsFill = values.every((input) => input.value.trim() !== '')
+  checkRequired(values, event) {
+    const { showError, showSuccess } = Validate
 
     values.forEach((input) => {
       if (input.value.trim() === '') {
-        Validate.showError(input, 'Este campo é obrigatório*')
-      } else {
-        Validate.showSuccess(input)
+        event.preventDefault()
+        return showError(input, 'Este campo é obrigatório*')
       }
+      return showSuccess(input)
     })
   },
 
-  passwordsMatch(confirmPassword, password) {
-    if (confirmPassword.value !== password.value) {
-      Validate.showError(
-        confirmPassword,
-        'A senha e a confirmação de senha estão incorretas!'
+  passwordsMatch(password, confirm_password, event) {
+    const { showError } = Validate
+
+    if (password.value !== confirm_password.value) {
+      event.preventDefault()
+
+      return showError(
+        confirm_password,
+        'Senha e confirmação de senha estão incorretas*'
       )
-      return false
     }
-    return true
+
+    return event
   },
 
-  passwordLength(password, min, max) {
-    if (password.value.length < min) {
-      Validate.showError(password, 'A senha deve ter no mínimo 10 caracteres!')
-      return false
+  checkLength(input, min, max, event) {
+    const { showSuccess, showError } = Validate
+
+    if (input.value.length < min) {
+      event.preventDefault()
+      return showError(input, `Deve ter no mínimo ${min} caracteres*`)
     }
-    if (password.value.length > max) {
-      Validate.showError(password, 'A senha deve ter no máximo 15 caracteres!')
-      return false
+    if (input.value.length > max) {
+      event.preventDefault()
+      return showError(input, `Deve ter no máximo ${max} caracteres*`)
     }
-    Validate.showSuccess(password)
-    return true
+
+    return showSuccess(input)
   },
 }
 
@@ -356,9 +366,10 @@ const Alert = {
 const ConfirmDelete = {
   confirm: false,
   handleDelete(event) {
-    ConfirmDelete.confirm = window.confirm('Tem certeza que deseja deletar?')
+    let { confirm } = ConfirmDelete
+    confirm = window.confirm('Tem certeza que deseja deletar?')
 
-    if (!ConfirmDelete.confirm) event.preventDefault()
+    if (!confirm) event.preventDefault()
   },
 }
 

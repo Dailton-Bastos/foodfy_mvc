@@ -6,7 +6,10 @@
           id="name"
           name="name"
           placeholder="Digite o nome completo"
-          data-field
+          {% if user %}
+            value="{{ user.name }}"
+          {% endif %}
+            data-user="name"
         >
         <small>Error message</small>
       </div>
@@ -17,7 +20,8 @@
           id="email"
           name="email"
           placeholder="Digite o email"
-          data-field
+          value="{{ user.email }}"
+          data-user="email"
         >
         <small>Error message</small>
       </div>
@@ -29,6 +33,10 @@
         type="checkbox"
         name="is_admin"
         value="1"
+
+        {% if user.is_admin === true %}
+          checked
+        {% endif %}
       >
     </div>
   </div>

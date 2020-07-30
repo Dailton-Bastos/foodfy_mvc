@@ -32,4 +32,12 @@ module.exports = {
     const { protocol, headers } = params
     return `${protocol}://${headers.host}${image.path.replace('public', '')}`
   },
+
+  checkAllFields(body) {
+    const keys = Object.keys(body)
+
+    const isValid = keys.every((key) => body[key] !== '' || key === 'is_admin')
+
+    return !isValid
+  },
 }
