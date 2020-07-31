@@ -1,5 +1,7 @@
 const { randomBytes } = require('crypto')
 const User = require('../../models/User')
+const RecipeFiles = require('../../models/RecipeFile')
+const File = require('../../models/File')
 
 const SendPasswordMail = require('../../jobs/SendPasswordMail')
 
@@ -101,9 +103,25 @@ module.exports = {
   },
 
   async delete(req, res) {
+    const { id: userSession } = req.session.user
     const { id } = req.params
 
     try {
+      if (userSession === +id) {
+        req.flash('error', 'Operação não permitida!')
+        return res.redirect('/admin/users')
+      }
+
+      const recipesFiles = await RecipeFiles.fileRecipesUser(id)
+
+      if (recipesFiles.length) {
+        try {
+          recipesFiles.forEach(async (file) => File.delete(file.id))
+        } catch (error) {
+          throw new Error(error)
+        }
+      }
+
       await User.delete(id)
 
       req.flash('success', 'Conta deletada com sucesso.')

@@ -36,4 +36,20 @@ module.exports = {
       throw new Error(error)
     }
   },
+
+  async fileRecipesUser(userId) {
+    const query = `
+      SELECT DISTINCT file_id AS id
+      FROM recipe_files
+      INNER JOIN recipes
+      ON recipe_files.recipe_id = recipes.id
+      INNER JOIN users
+      ON recipes.user_id = $1
+      ORDER BY file_id
+    `
+
+    const results = await db.query(query, [userId])
+
+    return results.rows
+  },
 }
