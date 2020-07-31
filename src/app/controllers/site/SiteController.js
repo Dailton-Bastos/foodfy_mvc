@@ -42,6 +42,8 @@ module.exports = {
         recipes: recipesMostAccessed,
       })
     } catch (error) {
+      req.flash('error', 'Error inesperado, tente novamente.')
+      res.redirect('/')
       throw new Error(error)
     }
   },
@@ -66,7 +68,7 @@ module.exports = {
     }
 
     try {
-      const results = await Recipes.all(params)
+      const results = await Recipes.findAll(params)
 
       const recipes = results.rows
 
@@ -81,6 +83,8 @@ module.exports = {
 
       return res.render('site/recipes/index', { info, allRecipes, pagination })
     } catch (error) {
+      req.flash('error', 'Error inesperado, tente novamente.')
+      res.redirect('/')
       throw new Error(error)
     }
   },
@@ -89,17 +93,18 @@ module.exports = {
     const { id } = req.params
 
     try {
-      let results = await Recipes.find(id)
+      const recipe = await Recipes.findByPk(id)
 
-      const recipe = results.rows[0]
-
-      if (!recipe) return res.send('Recipe not found')
+      if (!recipe) {
+        req.flash('error', 'Página não encontrada!')
+        return res.redirect('/not-found')
+      }
 
       const info = {
         page_title: `${recipe.title}`,
       }
 
-      results = await Recipes.files(id)
+      const results = await Recipes.files(id)
       const files = results.rows.map((file) => ({
         ...file,
         src: getImageURL(file, req),
@@ -107,6 +112,8 @@ module.exports = {
 
       return res.render('site/recipes/show', { info, recipe, files })
     } catch (error) {
+      req.flash('error', 'Error inesperado, tente novamente.')
+      res.redirect('/')
       throw new Error(error)
     }
   },
@@ -147,6 +154,8 @@ module.exports = {
 
       return res.render('site/chefs/index', { info, allChefs, pagination })
     } catch (error) {
+      req.flash('error', 'Error inesperado, tente novamente.')
+      res.redirect('/')
       throw new Error(error)
     }
   },
@@ -166,10 +175,12 @@ module.exports = {
     }
 
     try {
-      let results = await Chefs.find(id)
-      const chef = results.rows[0]
+      const chef = await Chefs.findByPk(id)
 
-      if (!chef) return res.send('Chef not found')
+      if (!chef) {
+        req.flash('error', 'Página não encontrada!')
+        return res.redirect('/not-found')
+      }
 
       const info = {
         page_title: `Chef | ${chef.name}`,
@@ -177,7 +188,7 @@ module.exports = {
 
       const { file_id } = chef
 
-      results = await Chefs.avatar(file_id)
+      let results = await Chefs.avatar(file_id)
 
       const file = results.rows[0]
 
@@ -208,6 +219,8 @@ module.exports = {
         pagination,
       })
     } catch (error) {
+      req.flash('error', 'Error inesperado, tente novamente.')
+      res.redirect('/')
       throw new Error(error)
     }
   },

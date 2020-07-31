@@ -13,7 +13,7 @@
 
 .menu-nav ul {
   display: flex;
-  margin-left: 12.2rem;
+  /* margin-left: 12.2rem; */
 }
 
 .menu-nav ul a {
@@ -43,6 +43,10 @@
   padding: 1rem 1.5rem;
 }
 
+.header-site form input:focus {
+  border-color: var(--purple);
+}
+
 .header-site form input::placeholder {
   font-size: 1.4rem;
   color: #999;
@@ -60,6 +64,15 @@
   margin-left: 0.8rem;
 }
 
+/* Button Signin */
+.header-site .btn-signin {
+  color: var(--purple);
+  border: 1px solid var(--purple);
+  border-radius: 4px;
+  padding: 5px 15px;
+  font-weight: bold;
+}
+
 @media (max-width: 760px) {
   .header-site {
     flex-direction: column;
@@ -73,6 +86,12 @@
 
   .menu-nav ul a {
     font-size: 2rem;
+  }
+
+  .header-site .btn-signin {
+    margin: 1rem auto 3rem;
+    order: -1;
+    text-align: center;
   }
 }
 

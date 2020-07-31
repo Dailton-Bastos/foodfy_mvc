@@ -2,7 +2,7 @@
 /* Header */
 .menu-admin {
   padding: 0 calc((100% - 940px) / 2);
-  height: 80px;
+  min-height: 80px;
   background-color: var(--dark);
   display: flex;
   align-items: center;
@@ -20,6 +20,19 @@
 
 .menu-nav.admin ul {
   margin-left: 5rem;
+}
+
+@media (max-width: 550px) {
+  .menu-admin .menu {
+    flex-direction: column;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 2rem auto;
+  }
+
+  .menu-admin form {
+    align-self: flex-end;
+  }
 }
 
 .menu-nav.admin ul a {

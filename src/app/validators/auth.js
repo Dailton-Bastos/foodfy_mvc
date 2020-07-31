@@ -38,43 +38,60 @@ async function resetPassword(req, res, next) {
   return next()
 }
 
+async function formNewPassword(req, res, next) {
+  const { token } = req.query
+
+  if (!token) {
+    req.flash('error', 'Página não encontrada!')
+    return res.redirect('/not-found')
+  }
+
+  return next()
+}
+
 async function newPassword(req, res, next) {
   const { email, password, passwordConfirm, token } = req.body
 
   const user = await User.findOne({ where: { reset_token: token } })
 
-  const { reset_token_expires } = user
+  if (user) {
+    const { reset_token_expires } = user
 
-  let now = new Date()
-  now = now.setHours(now.getHours())
+    let now = new Date()
+    now = now.setHours(now.getHours())
 
-  if (!reset_token_expires) {
-    req.flash('error', 'Token inválido, solicite nova recuperação de senha!')
-    return res.redirect('/reset-password')
+    if (!reset_token_expires) {
+      req.flash('error', 'Token inválido, solicite nova recuperação de senha!')
+      return res.redirect('/reset-password')
+    }
+
+    if (now > reset_token_expires) {
+      req.flash('error', 'Token expirado, solicite nova recuperação de senha!')
+      return res.redirect('/reset-password')
+    }
+
+    if (email !== user.email) {
+      req.flash('error', 'Email digitado não é cadastrado!')
+      return res.redirect('/reset-password')
+    }
+
+    if (passwordConfirm !== password) {
+      req.flash('error', 'A senha e a confirmação de senha estão incorretas!')
+      return res.redirect('/reset-password')
+    }
+
+    req.user = user
+
+    return next()
   }
 
-  if (now > reset_token_expires) {
-    req.flash('error', 'Token expirado, solicite nova recuperação de senha!')
-    return res.redirect('/reset-password')
-  }
-
-  if (email !== user.email) {
-    req.flash('error', 'Email digitado não é cadastrado!')
-    return res.redirect('/reset-password')
-  }
-
-  if (passwordConfirm !== password) {
-    req.flash('error', 'A senha e a confirmação de senha estão incorretas!')
-    return res.redirect('/reset-password')
-  }
-
-  req.user = user
-
-  return next()
+  req.flash('error', 'Solicitação negada!')
+  return res.redirect('/')
 }
 
 module.exports = {
   signin,
   resetPassword,
+  formNewPassword,
   newPassword,
 }
