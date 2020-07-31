@@ -4,7 +4,7 @@ const db = require('./database')
 
 module.exports = session({
   name: 'root',
-  secret: 'MyAppSecret',
+  secret: process.env.APP_SECRET,
   resave: false,
   saveUninitialized: false,
   store: new PgSession({ pool: db }),

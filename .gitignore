@@ -1,3 +1,4 @@
 node_modules
 /public/images
 /src/temp
+.env
