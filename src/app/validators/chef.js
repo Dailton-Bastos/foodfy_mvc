@@ -23,8 +23,8 @@ async function view(req, res, next) {
   const chef = await Chefs.findByPk(id)
 
   if (!chef) {
-    req.flash('error', 'Página não encontrada!')
-    return res.redirect('/not-found')
+    req.flash('error', 'Chef não encontrado!')
+    return res.redirect('/admin/chefs')
   }
 
   req.chef = chef
@@ -51,14 +51,14 @@ async function destroy(req, res, next) {
   const recipe = results.rows[0]
 
   if (recipe) {
-    req.flash('error', 'Chef possui receitas!')
+    req.flash('error', 'Chef possui receita(s)*')
     return res.redirect('/admin/chefs')
   }
 
   const chef = await Chefs.findByPk(id)
 
   if (!chef) {
-    req.flash('error', 'Chef não encontrado!')
+    req.flash('error', 'Chef não encontrado*')
     return res.redirect('/admin/chefs')
   }
 

@@ -42,8 +42,8 @@ module.exports = {
         recipes: recipesMostAccessed,
       })
     } catch (error) {
-      req.flash('error', 'Error inesperado, tente novamente.')
-      res.redirect('/')
+      req.flash('error', 'Página não encontrada.')
+      res.redirect('/not-found')
       throw new Error(error)
     }
   },
@@ -83,8 +83,8 @@ module.exports = {
 
       return res.render('site/recipes/index', { info, allRecipes, pagination })
     } catch (error) {
-      req.flash('error', 'Error inesperado, tente novamente.')
-      res.redirect('/')
+      req.flash('error', 'Página não encontrada.')
+      res.redirect('/not-found')
       throw new Error(error)
     }
   },
@@ -112,8 +112,8 @@ module.exports = {
 
       return res.render('site/recipes/show', { info, recipe, files })
     } catch (error) {
-      req.flash('error', 'Error inesperado, tente novamente.')
-      res.redirect('/')
+      req.flash('error', 'Página não encontrada.')
+      res.redirect('/not-found')
       throw new Error(error)
     }
   },
@@ -154,8 +154,8 @@ module.exports = {
 
       return res.render('site/chefs/index', { info, allChefs, pagination })
     } catch (error) {
-      req.flash('error', 'Error inesperado, tente novamente.')
-      res.redirect('/')
+      req.flash('error', 'Página não encontrada.')
+      res.redirect('/not-found')
       throw new Error(error)
     }
   },
@@ -219,8 +219,8 @@ module.exports = {
         pagination,
       })
     } catch (error) {
-      req.flash('error', 'Error inesperado, tente novamente.')
-      res.redirect('/')
+      req.flash('error', 'Página não encontrada.')
+      res.redirect('/not-found')
       throw new Error(error)
     }
   },

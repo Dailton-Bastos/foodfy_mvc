@@ -43,8 +43,8 @@ async function view(req, res, next) {
   const recipe = await Recipe.findByPk(id)
 
   if (!recipe) {
-    req.flash('error', 'Página não encontrada!')
-    return res.redirect('/not-found')
+    req.flash('error', 'Receita não encontrada!')
+    return res.redirect('/admin/recipes')
   }
 
   if (!is_admin) {

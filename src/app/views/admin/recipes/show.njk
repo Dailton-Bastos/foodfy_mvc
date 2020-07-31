@@ -47,7 +47,11 @@
 
       <div class="recipe-title">
         <h1>{{ recipe.title }}</h1>
-        <p>por<a href="/admin/chefs/{{ recipe.chef_id }}">{{ recipe.chef }}</a></p>
+        {% if session.is_admin %}
+          <p>por<a href="/admin/chefs/{{ recipe.chef_id }}">{{ recipe.chef }}</a></p>
+        {% else %}
+          <p>por<a href="/app/chefs/{{ recipe.chef_id }}">{{ recipe.chef }}</a></p>
+        {% endif %}
       </div>
 
       <div class="recipe-ingredients">

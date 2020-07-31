@@ -5,23 +5,34 @@ module.exports = {
     try {
       const { limit, offset, userId } = params
 
+      const total_recipes = `SELECT COUNT(DISTINCT recipes) AS total FROM recipes`
+
+      const orderBy = `
+        ORDER BY created_at DESC
+        LIMIT $1 OFFSET $2
+      `
       let query = `
         SELECT DISTINCT recipes.*,
-        (SELECT COUNT(DISTINCT recipes) AS total FROM recipes),
+        (${total_recipes}),
         chefs.name AS chef
         FROM recipes
         INNER JOIN chefs
         ON (recipes.chef_id = chefs.id)
+        ${orderBy}
       `
+
       if (userId) {
-        query = `${query}
+        query = `
+          SELECT DISTINCT recipes.*,
+          (${total_recipes} WHERE recipes.user_id = ${userId}),
+          chefs.name AS chef
+          FROM recipes
+          INNER JOIN chefs
+          ON (recipes.chef_id = chefs.id)
           WHERE recipes.user_id = ${userId}
+          ${orderBy}
         `
       }
-      query = `${query}
-        ORDER BY created_at DESC
-        LIMIT $1 OFFSET $2
-      `
 
       return db.query(query, [limit, offset])
     } catch (error) {

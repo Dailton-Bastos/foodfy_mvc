@@ -7,6 +7,7 @@ const SearchController = require('../app/controllers/SearchController')
 
 const authMiddleware = require('../app/middlewares/auth')
 const adminMiddleware = require('../app/middlewares/admin')
+const siteMiddleware = require('../app/middlewares/site')
 
 const site = require('./site')
 const recipes = require('./recipes')
@@ -23,10 +24,10 @@ routes.use((req, res, next) => {
 })
 
 // Site
-routes.get('/', SiteController.index)
+routes.get('/', siteMiddleware, SiteController.index)
 routes.get('/search', SearchController.index)
 
-routes.use('/app', site)
+routes.use('/app', siteMiddleware, site)
 
 routes.use('/admin', authMiddleware)
 
@@ -47,7 +48,6 @@ routes.use('/not-found', (req, res) => {
 })
 
 routes.use((req, res) => {
-  req.flash('error', 'Página não encontrada!')
   return res.redirect('/not-found')
 })
 

@@ -28,7 +28,15 @@
     </form>
 
     <div class="btn-signin">
-      <a href="/signin">Entrar</a>
+      {% if session %}
+        <a href="/signin">
+          <span class="material-icons">settings</span>Perfil
+        </a>
+      {% else %}
+        <a href="/signin">
+          <span class="material-icons">login</span>Entrar
+        </a>
+      {% endif %}
     </div>
 
   </div>

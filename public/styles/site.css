@@ -73,6 +73,17 @@
   font-weight: bold;
 }
 
+.header-site .btn-signin a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-site .btn-signin a span {
+  font-size: 1.8rem;
+  padding-right: 5px;
+}
+
 @media (max-width: 760px) {
   .header-site {
     flex-direction: column;

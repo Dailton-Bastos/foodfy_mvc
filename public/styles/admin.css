@@ -22,16 +22,38 @@
   margin-left: 5rem;
 }
 
-@media (max-width: 550px) {
+.menu-admin .option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.menu-admin .option .home {
+  margin-right: 10rem;
+}
+
+@media (max-width: 630px) {
+  .menu-admin {
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
   .menu-admin .menu {
     flex-direction: column;
     justify-content: center;
     flex-wrap: wrap;
     margin: 2rem auto;
   }
+  .menu-admin .option {
+    width: 100%;
+  }
 
   .menu-admin form {
-    align-self: flex-end;
+    margin-right: 2rem;
+  }
+
+  .menu-admin .option .home {
+    margin-left: 2rem;
   }
 }
 
@@ -47,6 +69,10 @@
   opacity: 1;
 }
 
+.menu-admin .home a {
+  color: #fff;
+}
+
 .menu-admin form button {
   display: block;
   color: #fff;
@@ -56,7 +82,6 @@
   text-transform: uppercase;
   border: none;
   padding: 8px;
-  margin-right: 1rem;
   background-color: var(--dark);
   transition: all 0.3s ease;
 }
